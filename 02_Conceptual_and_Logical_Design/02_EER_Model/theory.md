@@ -137,24 +137,7 @@ This is useful when we need to represent higher-level business objects like:
 
 ---
 
-## 8. Example EER Diagram
-
-```mermaid
-erDiagram
-    PERSON <|-- EMPLOYEE
-    PERSON <|-- CUSTOMER
-    PERSON <|-- STUDENT
-
-    EMPLOYEE ||--o{ PROJECT : works_on
-    STUDENT }o--o{ COURSE : enrolls
-    CUSTOMER ||--o{ ORDER : places
-```
-
-This diagram shows specialization and relationship layering in a realistic system.
-
----
-
-## 9. Diagram Illustration
+## 8. Diagram Illustration
 
 ![EER model diagram](images/eer%20diagram.png)
 
@@ -162,7 +145,7 @@ This image is stored beside the lesson and helps visualize specialization, gener
 
 ---
 
-## 10. SSMS and SQL Mapping
+## 9. SSMS and SQL Mapping
 
 EER concepts are usually designed before implementation. In SSMS, the equivalent implementation often looks like:
 
@@ -173,7 +156,7 @@ EER concepts are usually designed before implementation. In SSMS, the equivalent
 
 ---
 
-## 11. Equivalent T-SQL Example
+## 10. Equivalent T-SQL Example
 
 ```sql
 CREATE TABLE Person (
@@ -202,7 +185,7 @@ CREATE TABLE Customer (
 
 ---
 
-## 12. Exam-Friendly Summary
+## 11. Exam-Friendly Summary
 
 - EER model extends ER with inheritance and specialization
 - Superclass = general type
