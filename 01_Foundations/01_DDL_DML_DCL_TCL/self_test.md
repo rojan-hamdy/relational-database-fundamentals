@@ -1,6 +1,5 @@
 # Self-Test — DDL, DML, DCL, TCL — Definitions & Function of Each
 
-> Status: ✅ Ready for practice.
 
 **Q1. What does DDL stand for, and what is its main function?**
 
