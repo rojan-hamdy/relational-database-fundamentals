@@ -129,19 +129,11 @@ Enrollment(StudentID FK, CourseID FK, PRIMARY KEY(StudentID, CourseID))
 
 ---
 
-## 6. Image Path for Stored Visuals
+## 6. Diagram Illustration
 
-If you want to add a custom ER-to-relational mapping image, save it here:
+![ER to relational mapping diagram](images/er%20to%20relational%20mapping.png)
 
-`images/03_er_to_relational_mapping.png`
-
-Then reference it in the file like this:
-
-```markdown
-![ER to relational mapping diagram](images/03_er_to_relational_mapping.png)
-```
-
-You can also use Mermaid to keep the mapping example editable and lightweight.
+This diagram shows how the conceptual ER design is translated into relational tables, keys, and foreign keys.
 
 ---
 

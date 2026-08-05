@@ -166,19 +166,11 @@ Typical ER notations:
 
 ---
 
-## 8. Image Path for Stored Diagram
+## 8. Diagram Illustration
 
-If you want to insert a screenshot or custom ER diagram image, save it here:
+![ER model diagram](images/er%20diagram.png)
 
-`images/01_er_model_diagram.png`
-
-Then reference it in the file like this:
-
-```markdown
-![ER model diagram](images/01_er_model_diagram.png)
-```
-
-You can also use a Mermaid diagram directly in the markdown if you prefer editable, version-controlled visuals.
+This image is stored in the lesson folder and is used to visually illustrate the ER model and its relationships.
 
 ---
 

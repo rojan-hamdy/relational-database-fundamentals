@@ -131,19 +131,11 @@ Customer(PersonID PK/FK, MembershipNumber)
 
 ---
 
-## 7. Image Path for Stored Visuals
+## 7. Diagram Illustration
 
-If you want to insert a final EER mapping screenshot or exported diagram, save it here:
+![EER to relational mapping diagram](images/eer%20to%20relational%20mapping.png)
 
-`images/04_eer_to_relational_mapping.png`
-
-Then reference it like this:
-
-```markdown
-![EER to relational mapping diagram](images/04_eer_to_relational_mapping.png)
-```
-
-As with the other design topics, Mermaid is a strong option if you want the diagram to remain source-controlled and editable.
+This visual clarifies how superclass and subclass relationships become separate relational tables while preserving inheritance rules.
 
 ---
 

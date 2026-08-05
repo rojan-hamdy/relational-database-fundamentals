@@ -154,19 +154,11 @@ This diagram shows specialization and relationship layering in a realistic syste
 
 ---
 
-## 9. Image Path for Stored Visuals
+## 9. Diagram Illustration
 
-If you want to add a custom EER diagram screenshot or exported image, save it here:
+![EER model diagram](images/eer%20diagram.png)
 
-`images/02_eer_model_diagram.png`
-
-Reference it in the file like this:
-
-```markdown
-![EER model diagram](images/02_eer_model_diagram.png)
-```
-
-Mermaid is also a good option for editable diagram text stored directly in the repo.
+This image is stored beside the lesson and helps visualize specialization, generalization, and inheritance patterns in the EER model.
 
 ---
 
