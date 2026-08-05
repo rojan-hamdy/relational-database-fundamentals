@@ -1,0 +1,2 @@
+-- Hands-on practice: GROUP BY & HAVING
+-- Status: not yet built

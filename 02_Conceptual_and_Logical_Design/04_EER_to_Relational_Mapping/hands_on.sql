@@ -1,0 +1,2 @@
+-- Hands-on practice: EER to Relational Mapping
+-- Status: not yet built

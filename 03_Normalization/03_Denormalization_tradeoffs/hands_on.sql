@@ -1,0 +1,2 @@
+-- Hands-on practice: Denormalization Tradeoffs
+-- Status: not yet built

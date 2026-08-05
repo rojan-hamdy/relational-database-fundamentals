@@ -1,0 +1,2 @@
+-- Hands-on practice: Centralized vs Distributed Databases
+-- Status: not yet built

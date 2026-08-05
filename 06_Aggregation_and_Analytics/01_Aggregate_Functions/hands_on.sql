@@ -1,0 +1,2 @@
+-- Hands-on practice: Aggregate Functions
+-- Status: not yet built

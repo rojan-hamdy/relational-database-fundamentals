@@ -1,0 +1,2 @@
+-- Hands-on practice: JOINs (Inner, Outer, Cross, Self)
+-- Status: not yet built

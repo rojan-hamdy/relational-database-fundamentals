@@ -1,0 +1,2 @@
+-- Hands-on practice: SELECT, WHERE, ORDER BY
+-- Status: not yet built

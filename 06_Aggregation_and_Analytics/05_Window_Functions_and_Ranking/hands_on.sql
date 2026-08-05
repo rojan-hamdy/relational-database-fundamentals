@@ -1,0 +1,2 @@
+-- Hands-on practice: Window Functions & Ranking
+-- Status: not yet built

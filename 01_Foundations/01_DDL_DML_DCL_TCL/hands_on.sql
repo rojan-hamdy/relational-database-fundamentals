@@ -1,0 +1,2 @@
+-- Hands-on practice: DDL, DML, DCL, TCL — Definitions & Function of Each
+-- Status: not yet built

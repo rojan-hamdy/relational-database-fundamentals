@@ -1,0 +1,2 @@
+-- Hands-on practice: Import/Export via SSMS Wizard
+-- Status: not yet built

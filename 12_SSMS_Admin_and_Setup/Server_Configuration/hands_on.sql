@@ -1,0 +1,2 @@
+-- Hands-on practice: SSMS Server Configuration
+-- Status: not yet built

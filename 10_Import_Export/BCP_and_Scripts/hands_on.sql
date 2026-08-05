@@ -1,0 +1,2 @@
+-- Hands-on practice: Import/Export via BCP & Scripts
+-- Status: not yet built

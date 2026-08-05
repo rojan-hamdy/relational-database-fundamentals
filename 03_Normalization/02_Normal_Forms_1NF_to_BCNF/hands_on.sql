@@ -1,0 +1,2 @@
+-- Hands-on practice: Normal Forms (1NF to BCNF)
+-- Status: not yet built

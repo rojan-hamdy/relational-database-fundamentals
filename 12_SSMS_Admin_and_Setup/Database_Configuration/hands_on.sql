@@ -1,0 +1,2 @@
+-- Hands-on practice: SSMS Database Configuration
+-- Status: not yet built

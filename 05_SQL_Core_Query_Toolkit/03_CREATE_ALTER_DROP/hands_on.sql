@@ -1,0 +1,2 @@
+-- Hands-on practice: CREATE, ALTER, DROP
+-- Status: not yet built

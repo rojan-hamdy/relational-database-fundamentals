@@ -1,0 +1,2 @@
+-- Hands-on practice: NoSQL
+-- Status: not yet built

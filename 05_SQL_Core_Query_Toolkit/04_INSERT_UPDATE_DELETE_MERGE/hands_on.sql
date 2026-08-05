@@ -1,0 +1,2 @@
+-- Hands-on practice: INSERT, UPDATE, DELETE, MERGE
+-- Status: not yet built

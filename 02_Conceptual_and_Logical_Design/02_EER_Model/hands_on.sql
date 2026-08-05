@@ -1,0 +1,2 @@
+-- Hands-on practice: EER Model
+-- Status: not yet built
