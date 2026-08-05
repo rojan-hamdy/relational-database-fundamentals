@@ -100,10 +100,3 @@ This keeps the learning flow aligned with real database work.
 
 ---
 
-## 4. Support files
-
-- [glossary.md](glossary.md)
-- [style_guide.md](style_guide.md)
-
-These files are useful references, but they are not the main learning content. The active learning content lives in the numbered modules.
-
