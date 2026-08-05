@@ -1,6 +1,5 @@
 # Database System Concepts and Architecture
 
-> Status: ✅ Built as the architecture foundation lesson.
 
 ## Overview
 A database system is more than just a collection of tables. It is an integrated system that includes:
