@@ -1,7 +1,5 @@
 # Import/Export via SSMS Wizard
 
-> Status: ✅ Built as the GUI-based data migration lesson.
-
 ## Overview
 SQL Server Management Studio (SSMS) includes a wizard that helps import and export data between SQL Server and external sources such as flat files, Excel files, or other database systems.
 

@@ -1,7 +1,5 @@
 # Security Backbone — Step 01
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 01 — Identify assets and sensitive data
 
 The first step in the security backbone is to understand what must be protected.

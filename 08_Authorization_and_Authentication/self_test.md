@@ -1,7 +1,5 @@
 # Self-Test — Authorization and Authentication
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is authentication?**
 
 <details>

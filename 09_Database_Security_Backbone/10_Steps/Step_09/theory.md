@@ -1,7 +1,5 @@
 # Security Backbone — Step 09
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 09 — Back up, restore, and recover securely
 
 A backup is part of the security design. If the backup is missing or unprotected, recovery can be impossible.

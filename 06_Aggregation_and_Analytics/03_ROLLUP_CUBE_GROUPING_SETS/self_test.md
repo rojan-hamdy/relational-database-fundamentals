@@ -1,7 +1,5 @@
 # Self-Test — ROLLUP, CUBE, GROUPING SETS
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does ROLLUP do?**
 
 <details>

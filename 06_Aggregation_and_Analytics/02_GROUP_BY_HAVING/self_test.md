@@ -1,7 +1,5 @@
 # Self-Test — GROUP BY & HAVING
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does GROUP BY do?**
 
 <details>

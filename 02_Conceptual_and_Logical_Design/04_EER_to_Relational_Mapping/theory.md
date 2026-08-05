@@ -1,7 +1,5 @@
 # EER to Relational Mapping
 
-> Status: ✅ Built as the extended conceptual-to-relational translation lesson.
-
 ## Overview
 EER-to-relational mapping extends the ER-to-relational process by handling inheritance, specialization, and generalization. The mapping rules must preserve the superclass-subclass relationships while still producing a valid relational design.
 

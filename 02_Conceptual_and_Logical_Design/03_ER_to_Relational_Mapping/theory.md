@@ -1,7 +1,5 @@
 # ER to Relational Mapping
 
-> Status: ✅ Built as the conceptual-to-relational translation lesson.
-
 ## Overview
 ER-to-relational mapping is the process of transforming an ER diagram into a relational schema. This is the bridge between conceptual design and database implementation.
 

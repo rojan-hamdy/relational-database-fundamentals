@@ -1,7 +1,5 @@
 # Self-Test — PIVOT & UNPIVOT
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does PIVOT do?**
 
 <details>

@@ -1,7 +1,5 @@
 # Self-Test — Import/Export via SSMS Wizard
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is the SSMS Import and Export Wizard used for?**
 
 <details>

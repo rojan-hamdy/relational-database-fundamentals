@@ -1,7 +1,5 @@
 # Denormalization Tradeoffs
 
-> Status: ✅ Built as the performance-vs-integrity design lesson.
-
 ## Overview
 Denormalization is the intentional process of combining tables or repeating data to improve read performance and simplify reporting. It is the opposite of normalization.
 

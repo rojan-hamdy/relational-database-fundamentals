@@ -1,7 +1,5 @@
 # Security Backbone — Step 04
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 04 — Apply authorization with least privilege
 
 Authorization decides what a valid user may do.

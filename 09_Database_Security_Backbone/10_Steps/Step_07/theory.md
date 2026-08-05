@@ -1,7 +1,5 @@
 # Security Backbone — Step 07
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 07 — Manage passwords and secrets safely
 
 Passwords should never be embedded in plain SQL scripts or source code.

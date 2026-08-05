@@ -1,7 +1,5 @@
 # Self-Test — Window Functions & Ranking
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is a window function?**
 
 <details>

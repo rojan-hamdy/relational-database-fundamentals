@@ -1,7 +1,5 @@
 # Security Backbone — Step 06
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 06 — Secure data in transit and at rest
 
 Security is not only about login controls. Data also needs to be protected while stored and while moving across networks.

@@ -1,7 +1,5 @@
 # Self-Test — PK, FK, Unique, Check, Default Constraints
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does a primary key do?**
 
 <details>

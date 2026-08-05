@@ -1,7 +1,5 @@
 # SSMS Server Configuration
 
-> Status: ✅ Built as the SQL Server instance administration lesson.
-
 ## Overview
 Server configuration in SSMS focuses on the instance itself: its properties, security settings, network configuration, and service behavior. This is the higher-level administration layer above individual databases.
 

@@ -1,7 +1,5 @@
 # ER Model
 
-> Status: ✅ Built as the conceptual design lesson for entity relationships.
-
 ## Overview
 The Entity-Relationship (ER) model is the first major design layer in database modeling. It describes the data in terms of entities, attributes, and relationships without worrying yet about physical storage details.
 

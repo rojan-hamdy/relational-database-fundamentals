@@ -1,7 +1,5 @@
 # Self-Test — SELECT, WHERE, ORDER BY
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does SELECT do?**
 
 <details>

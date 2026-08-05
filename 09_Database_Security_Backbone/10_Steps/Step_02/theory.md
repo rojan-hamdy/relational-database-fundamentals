@@ -1,7 +1,5 @@
 # Security Backbone — Step 02
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 02 — Define users, roles, and access groups
 
 Access should be assigned by responsibility, not by ad hoc exceptions.

@@ -1,7 +1,5 @@
 # SELECT, WHERE, ORDER BY
 
-> Status: ✅ Built as the core retrieval lesson.
-
 ## Overview
 The most common SQL statement is `SELECT`. It retrieves data from one or more tables. The `WHERE` clause limits the rows returned, and `ORDER BY` sorts the output.
 

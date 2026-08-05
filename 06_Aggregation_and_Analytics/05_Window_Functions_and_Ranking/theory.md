@@ -1,7 +1,5 @@
 # Window Functions & Ranking
 
-> Status: ✅ Built as the analytical function lesson.
-
 ## Overview
 Window functions perform calculations across a set of table rows related to the current row, without collapsing the result into a single row like aggregate functions do.
 

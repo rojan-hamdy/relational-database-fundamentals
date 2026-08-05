@@ -1,7 +1,5 @@
 # Functional Dependencies
 
-> Status: ✅ Built as the normalization foundation lesson.
-
 ## Overview
 Normalization is the process of organizing a database so that it reduces redundancy, avoids anomalies, and preserves data integrity. It is tightly related to functional dependencies, because a dependency tells us which attributes are logically determined by others.
 

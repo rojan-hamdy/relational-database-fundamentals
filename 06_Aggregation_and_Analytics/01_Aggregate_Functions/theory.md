@@ -1,7 +1,5 @@
 # Aggregate Functions
 
-> Status: ✅ Built as the summary-statistics lesson.
-
 ## Overview
 Aggregate functions summarize multiple rows into a single value. They are widely used in reporting, dashboards, and operational analysis.
 

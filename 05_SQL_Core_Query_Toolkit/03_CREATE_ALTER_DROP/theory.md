@@ -1,7 +1,5 @@
 # CREATE, ALTER, DROP
 
-> Status: ✅ Built as the schema-definition lesson.
-
 ## Overview
 `CREATE`, `ALTER`, and `DROP` belong to the DDL group of SQL commands. They define and modify the structure of database objects such as tables, views, schemas, and databases.
 

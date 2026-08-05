@@ -1,7 +1,5 @@
 # Conceptual vs Logical vs Physical Design
 
-> Status: ✅ Built as the design-level transition lesson.
-
 ## Overview
 A database is often designed in stages. Each stage answers a different question:
 

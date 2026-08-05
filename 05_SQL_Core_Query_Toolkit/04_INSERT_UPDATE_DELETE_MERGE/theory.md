@@ -1,7 +1,5 @@
 # INSERT, UPDATE, DELETE, MERGE
 
-> Status: ✅ Built as the data-manipulation lesson.
-
 ## Overview
 These commands change the data inside existing tables. They belong to DML and are among the most frequently used SQL operations in database applications.
 

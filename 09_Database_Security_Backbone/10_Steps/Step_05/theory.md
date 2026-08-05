@@ -1,7 +1,5 @@
 # Security Backbone — Step 05
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 05 — Protect database objects
 
 Not all objects should be equally accessible.

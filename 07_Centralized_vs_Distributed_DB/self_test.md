@@ -1,7 +1,5 @@
 # Self-Test — Centralized vs Distributed Databases
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is a centralized database?**
 
 <details>

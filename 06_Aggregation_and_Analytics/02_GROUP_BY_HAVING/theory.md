@@ -1,7 +1,5 @@
 # GROUP BY & HAVING
 
-> Status: ✅ Built as the grouped-aggregation lesson.
-
 ## Overview
 `GROUP BY` partitions rows into groups, and aggregate functions are then applied to each group. `HAVING` filters those grouped results after aggregation.
 

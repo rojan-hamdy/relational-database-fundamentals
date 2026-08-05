@@ -1,7 +1,5 @@
 # Security Backbone — Step 08
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 08 — Monitor access, changes, and audit activity
 
 You cannot secure what you do not audit.

@@ -1,7 +1,5 @@
 # Self-Test — CREATE, ALTER, DROP
 
-> Status: ✅ Ready for practice.
-
 **Q1. Which command creates a database object?**
 
 <details>

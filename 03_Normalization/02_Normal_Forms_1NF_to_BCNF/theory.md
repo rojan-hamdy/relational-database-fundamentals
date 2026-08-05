@@ -1,7 +1,5 @@
 # Normal Forms (1NF to BCNF)
 
-> Status: ✅ Built as the relational normalization progression lesson.
-
 ## Overview
 Normalization is the process of organizing a database into a structured form to reduce data redundancy and improve integrity. It follows a sequence of normal forms, each imposing stronger rules.
 

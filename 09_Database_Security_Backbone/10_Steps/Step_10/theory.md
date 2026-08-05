@@ -1,7 +1,5 @@
 # Security Backbone — Step 10
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 10 — Review, test, and improve security regularly
 
 Security is a continuous lifecycle, not a one-time deployment.

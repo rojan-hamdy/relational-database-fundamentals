@@ -1,7 +1,5 @@
 # Security Backbone — Step 03
 
-> Status: ✅ Built as a practical checklist.
-
 ## Step 03 — Enforce authentication
 
 Authentication confirms identity. Without it, access control cannot work.

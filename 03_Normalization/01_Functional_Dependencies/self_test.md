@@ -1,7 +1,5 @@
 # Self-Test — Functional Dependencies
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is a functional dependency?**
 
 <details>

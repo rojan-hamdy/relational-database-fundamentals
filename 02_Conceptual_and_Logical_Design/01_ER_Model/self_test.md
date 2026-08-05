@@ -1,7 +1,5 @@
 # Self-Test — ER Model
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is an entity in an ER model?**
 
 <details>

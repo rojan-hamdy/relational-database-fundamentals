@@ -1,7 +1,5 @@
 # Authorization and Authentication
 
-> Status: ✅ Built as the access-control fundamentals lesson.
-
 ## Overview
 Authentication and authorization are often confused, but they describe two different security functions.
 

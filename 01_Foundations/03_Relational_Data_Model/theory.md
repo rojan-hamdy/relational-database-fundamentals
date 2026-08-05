@@ -1,6 +1,5 @@
 # The Relational Data Model
 
-> Status: ✅ Built as the relational design foundation lesson.
 
 ## Overview
 The relational data model is the foundation of modern database design. It organizes data into tables, where each table represents a relation and each row represents a record.

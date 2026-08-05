@@ -1,7 +1,5 @@
 # Self-Test — SSMS Server Configuration
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does server configuration control?**
 
 <details>

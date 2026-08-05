@@ -1,7 +1,5 @@
 # Self-Test — Import/Export via BCP & Scripts
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is BCP used for?**
 
 <details>

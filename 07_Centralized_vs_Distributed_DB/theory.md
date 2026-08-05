@@ -1,6 +1,5 @@
 # Centralized vs Distributed Databases
 
-> Status: ✅ Built as the architecture and data-placement lesson.
 
 ## Overview
 A database system can be centralized or distributed depending on where the data is stored and how it is managed.

@@ -1,7 +1,5 @@
 # Database Security Backbone — Overview
 
-> Status: ✅ Built as the security framework overview.
-
 ## Overview
 The Database Security Backbone is a practical way to think about database protection as a layered system. Security should not be a single setting or one-time action; it is a continuous process built from multiple controls working together.
 

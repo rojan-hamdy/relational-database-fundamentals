@@ -1,7 +1,5 @@
 # SSMS Database Configuration
 
-> Status: ✅ Built as the SSMS database administration lesson.
-
 ## Overview
 SSMS provides a graphical interface for configuring database properties and objects. This is often the starting point for database administrators and developers working with SQL Server.
 

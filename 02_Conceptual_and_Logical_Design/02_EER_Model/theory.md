@@ -1,7 +1,5 @@
 # EER Model
 
-> Status: ✅ Built as the extended conceptual design lesson.
-
 ## Overview
 The Enhanced Entity-Relationship (EER) model extends the basic ER model by adding more powerful modeling features. It is used when the data has inheritance, specialization, generalization, categories, or more complex relationships.
 

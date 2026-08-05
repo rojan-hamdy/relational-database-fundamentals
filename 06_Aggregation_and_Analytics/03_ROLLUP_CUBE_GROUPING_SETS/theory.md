@@ -1,7 +1,5 @@
 # ROLLUP, CUBE, GROUPING SETS
 
-> Status: ✅ Built as the multi-level aggregation lesson.
-
 ## Overview
 These functions create multiple grouping levels in a single query. They are useful when reporting requires totals, subtotals, and category breakdowns.
 

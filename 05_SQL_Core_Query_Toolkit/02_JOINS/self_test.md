@@ -1,7 +1,5 @@
 # Self-Test — JOINs (Inner, Outer, Cross, Self)
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is the purpose of a JOIN?**
 
 <details>

@@ -1,7 +1,5 @@
 # Self-Test — Normal Forms (1NF to BCNF)
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is normalization?**
 
 <details>

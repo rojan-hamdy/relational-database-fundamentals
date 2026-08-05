@@ -1,7 +1,5 @@
 # Self-Test — SSMS Database Configuration
 
-> Status: ✅ Ready for practice.
-
 **Q1. Where do you configure database properties in SSMS?**
 
 <details>

@@ -1,7 +1,5 @@
 # Self-Test — INSERT, UPDATE, DELETE, MERGE
 
-> Status: ✅ Ready for practice.
-
 **Q1. Which command adds new rows to a table?**
 
 <details>

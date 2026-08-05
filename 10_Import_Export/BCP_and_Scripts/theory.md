@@ -1,7 +1,5 @@
 # Import/Export via BCP & Scripts
 
-> Status: ✅ Built as the data movement lesson.
-
 ## Overview
 Import and export are essential when data needs to move between systems, files, and SQL Server instances. BCP (Bulk Copy Program) and SQL scripts are common tools for this work.
 

@@ -1,7 +1,5 @@
 # Self-Test — Denormalization Tradeoffs
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is denormalization?**
 
 <details>

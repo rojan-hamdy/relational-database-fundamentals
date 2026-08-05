@@ -1,7 +1,5 @@
 # Self-Test — Aggregate Functions
 
-> Status: ✅ Ready for practice.
-
 **Q1. What do aggregate functions do?**
 
 <details>

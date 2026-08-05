@@ -1,7 +1,5 @@
 # PIVOT & UNPIVOT
 
-> Status: ✅ Built as the table-rotation lesson.
-
 ## Overview
 `PIVOT` rotates rows into columns. `UNPIVOT` does the opposite: it turns columns into rows.
 
