@@ -45,11 +45,3 @@ This glossary is the single source of truth for key database terms in the repo. 
 - **Window Function** — a function that performs calculations across a set of related rows. See [Window Functions and Ranking](../06_Aggregation_and_Analytics/05_Window_Functions_and_Ranking/theory.md).
 
 ---
-
-## Quick usage convention
-
-When you mention a key concept in a lesson, link to this glossary on the first use, for example:
-
-> **Primary key** (see [Glossary](glossary.md#p))
-
-This keeps terminology consistent across the repo without repeating definitions everywhere.
