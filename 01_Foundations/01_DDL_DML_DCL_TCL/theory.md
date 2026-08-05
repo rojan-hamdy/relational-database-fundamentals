@@ -1,6 +1,5 @@
 # DDL, DML, DCL, TCL — Definitions & Function of Each
 
-> Status: ✅ Built as the foundational lesson for the repo.
 
 ## Overview
 SQL is not one single language with one purpose. It is divided into different command groups, each responsible for a different layer of database work.
