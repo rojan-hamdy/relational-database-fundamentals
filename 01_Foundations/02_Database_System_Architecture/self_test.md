@@ -1,6 +1,5 @@
 # Self-Test — Database System Concepts and Architecture
 
-> Status: ✅ Ready for practice.
 
 **Q1. What is the difference between a database and a DBMS?**
 
