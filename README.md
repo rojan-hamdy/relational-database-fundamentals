@@ -18,7 +18,7 @@ The active learning content is organized in the numbered modules below. The supp
 
 ```text
 SQL-server-complete-guide/
-├── 00_Roadmap_and_StyleGuide/
+├── 00_Roadmap_and_glossary/
 ├── 01_Foundations/
 ├── 02_Conceptual_and_Logical_Design/
 ├── 03_Normalization/
