@@ -1,87 +1,24 @@
 # SQL Server Complete Guide
 
-This repository is a complete learning path for SQL Server, database design, database administration, and security.
+This repository is the main learning path for SQL Server, relational database design, SQL querying, and database administration.
 
-It combines:
-- theory explanations,
-- SQL practice files,
-- self-test questions,
-- SSMS wizard-based steps,
-- equivalent T-SQL examples,
-- and security/admin workflows.
+It includes:
+- theory notes,
+- hands-on SQL examples,
+- self-test exercises,
+- SSMS setup workflows,
+- security and authentication examples,
+- and practical database administration steps.
 
-The goal is to help a learner move from database fundamentals to practical SQL Server administration without needing to search across multiple scattered resources.
-
----
-
-## What this repo covers
-
-### 1. Foundations
-- DDL, DML, DCL, TCL
-- Database system architecture
-- Relational data model
-
-### 2. Conceptual and logical design
-- ER model
-- EER model
-- ER-to-relational mapping
-- EER-to-relational mapping
-- Conceptual vs logical vs physical design
-
-### 3. Normalization
-- Functional dependencies
-- 1NF to BCNF
-- Denormalization tradeoffs
-
-### 4. Constraints and integrity
-- Primary keys, foreign keys, unique, check, default
-- Referential integrity actions
-
-### 5. SQL core query toolkit
-- SELECT / WHERE / ORDER BY
-- Joins
-- CREATE / ALTER / DROP
-- INSERT / UPDATE / DELETE / MERGE
-- SQL syntax cheat sheet
-
-### 6. Aggregation and analytics
-- Aggregate functions
-- GROUP BY / HAVING
-- ROLLUP / CUBE / GROUPING SETS
-- PIVOT / UNPIVOT
-- Window functions and ranking
-- Built-in SQL functions
-
-### 7. Architecture and access control
-- Centralized vs distributed database systems
-- Authorization and authentication
-- Database security backbone (10-step framework)
-
-### 8. Data movement and administration
-- Import and export
-- BCP and scripts
-- SSMS import/export wizard
-- SSMS server configuration
-- SSMS database configuration
-
-### 9. NoSQL and modern alternatives
-- NoSQL concepts and comparison with relational databases
-
-### 10. Security practices in SQL Server
-- authentication mode changes
-- login creation
-- user creation
-- schema creation and schema ownership
-- permission assignment
-- reconnecting and validation
+The active learning content is organized in the numbered modules below. The support files in the 00 folder are useful references, but they are not the main learning flow.
 
 ---
 
-## Repository structure
+## Active repo structure
 
 ```text
 SQL-server-complete-guide/
-├── 00_Roadmap_and_StyleGuide/        # supporting project notes and formatting conventions
+├── 00_Roadmap_and_StyleGuide/
 ├── 01_Foundations/
 ├── 02_Conceptual_and_Logical_Design/
 ├── 03_Normalization/
@@ -94,7 +31,6 @@ SQL-server-complete-guide/
 ├── 10_Import_Export/
 ├── 11_NoSQL/
 ├── 12_SSMS_Admin_and_Setup/
-├── 13_Certificates_and_External_Courses/
 ├── assets/
 ├── LICENSE
 ├── README.md
@@ -103,79 +39,89 @@ SQL-server-complete-guide/
 
 ---
 
-## Recommended learning path
+## Main learning modules
 
-1. Start with the foundations
-2. Learn design and modeling
-3. Study normalization and integrity rules
-4. Practice SQL query building
-5. Move to aggregation and window functions
-6. Understand security and authorization
-7. Learn SSMS setup and configuration
-8. Finish with import/export and NoSQL concepts
+### 01_Foundations
+- DDL, DML, DCL, TCL
+- database architecture
+- relational model
 
-That order keeps the concepts logical and prevents confusion between design, querying, and administration.
+### 02_Conceptual_and_Logical_Design
+- ER model
+- EER model
+- mapping to relational design
+- conceptual vs logical vs physical design
+
+### 03_Normalization
+- functional dependencies
+- normal forms
+- denormalization tradeoffs
+
+### 04_Constraints_and_Integrity
+- PK, FK, UNIQUE, CHECK, DEFAULT
+- referential integrity actions
+
+### 05_SQL_Core_Query_Toolkit
+- SELECT, WHERE, ORDER BY
+- JOINs
+- CREATE, ALTER, DROP
+- INSERT, UPDATE, DELETE, MERGE
+- SQL syntax cheatsheet
+
+### 06_Aggregation_and_Analytics
+- aggregates
+- GROUP BY and HAVING
+- ROLLUP, CUBE, GROUPING SETS
+- PIVOT and UNPIVOT
+- window functions and ranking
+- built-in functions
+
+### 07_Centralized_vs_Distributed_DB
+- centralized vs distributed architecture
+
+### 08_Authorization_and_Authentication
+- authentication and authorization concepts
+- practical permission examples
+
+### 09_Database_Security_Backbone
+- 10-step security framework
+
+### 10_Import_Export
+- BCP and scripts
+- SSMS Import/Export wizard
+
+### 11_NoSQL
+- NoSQL overview and comparison
+
+### 12_SSMS_Admin_and_Setup
+- SQL Server authentication and instance settings
+- database configuration
+- login, user, schema, and permissions flow
 
 ---
 
-## Lesson pattern used in the repo
+## Recommended learning order
 
-Each major lesson usually contains:
-- `theory.md` — concept explanation and examples
-- `hands_on.sql` — practical exercises
-- `self_test.md` — revision questions and answers
-- `images/` — visual references for that lesson
+1. Foundations
+2. Design and modeling
+3. Normalization and integrity
+4. SQL query building
+5. Aggregation and analytics
+6. Security and authorization
+7. SSMS administration
+8. Import/export and NoSQL
 
-This makes each topic self-contained and easy to study.
-
----
-
-## Important note about the 00 folder
-
-The `00_Roadmap_and_StyleGuide` folder is useful as a supporting project guide, but it is not the main learning path. For the learner, the important content is in the numbered modules above.
-
-If you want a lighter path, treat the 00 folder as optional background material rather than the main entry point.
+This sequence keeps the course logical and avoids jumping between theory, design, and administration too early.
 
 ---
 
-## Learning outcomes
+## Lesson pattern
 
-By the end of this course, you should be able to:
-- explain database fundamentals and SQL language groups,
-- design relational schemas and map ER models to tables,
-- normalize data and enforce constraints,
-- write advanced SQL queries and analytics logic,
-- secure data with proper login, user, schema, and permission design,
-- configure SSMS for server and database setup,
-- import/export data safely,
-- understand NoSQL as a contrast to relational databases.
-
----
-
-## Repo usage
-
-Open the folder that matches the topic you want to study, then read:
-1. `theory.md` for the concept,
-2. `hands_on.sql` for practical examples,
-3. `self_test.md` for revision.
-
-This keeps the learning flow simple and consistent.
-
----
-
-## Quick references
-
-- [01_Foundations](01_Foundations)
-- [02_Conceptual_and_Logical_Design](02_Conceptual_and_Logical_Design)
-- [03_Normalization](03_Normalization)
-- [04_Constraints_and_Integrity](04_Constraints_and_Integrity)
-- [05_SQL_Core_Query_Toolkit](05_SQL_Core_Query_Toolkit)
-- [06_Aggregation_and_Analytics](06_Aggregation_and_Analytics)
-- [08_Authorization_and_Authentication](08_Authorization_and_Authentication)
-- [09_Database_Security_Backbone](09_Database_Security_Backbone)
-- [10_Import_Export](10_Import_Export)
-- [11_NoSQL](11_NoSQL)
-- [12_SSMS_Admin_and_Setup](12_SSMS_Admin_and_Setup)
+Each major topic is structured around:
+- `theory.md` for the concept,
+- `hands_on.sql` for practice,
+- `self_test.md` for review,
+- `images/` for visuals specific to that lesson.
 
 ---
 
@@ -185,4 +131,21 @@ This keeps the learning flow simple and consistent.
 - [00_Roadmap_and_StyleGuide/style_guide.md](00_Roadmap_and_StyleGuide/style_guide.md)
 - [00_Roadmap_and_StyleGuide/glossary.md](00_Roadmap_and_StyleGuide/glossary.md)
 
-These are helpful supporting references, but the actual learning content lives primarily in the main numbered sections of the repo.
+These are useful references, but the actual learning content is in the numbered modules above.
+
+---
+
+## Quick access
+
+- [01_Foundations](01_Foundations)
+- [02_Conceptual_and_Logical_Design](02_Conceptual_and_Logical_Design)
+- [03_Normalization](03_Normalization)
+- [04_Constraints_and_Integrity](04_Constraints_and_Integrity)
+- [05_SQL_Core_Query_Toolkit](05_SQL_Core_Query_Toolkit)
+- [06_Aggregation_and_Analytics](06_Aggregation_and_Analytics)
+- [07_Centralized_vs_Distributed_DB](07_Centralized_vs_Distributed_DB)
+- [08_Authorization_and_Authentication](08_Authorization_and_Authentication)
+- [09_Database_Security_Backbone](09_Database_Security_Backbone)
+- [10_Import_Export](10_Import_Export)
+- [11_NoSQL](11_NoSQL)
+- [12_SSMS_Admin_and_Setup](12_SSMS_Admin_and_Setup)
