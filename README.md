@@ -36,9 +36,9 @@ topic_folder/
 ```
 
 ## Status Legend
-- 🚧 Not yet built (placeholder)
-- 🟡 In progress
 - ✅ Complete
+- 🟡 In progress
+- 🚧 Kept only for intentionally future content
 
 ## How We Build Each Lesson
 1. You provide the source PDF/notes (+ any SSMS screenshots) for a topic

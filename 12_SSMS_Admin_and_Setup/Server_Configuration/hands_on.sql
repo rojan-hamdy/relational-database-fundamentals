@@ -1,2 +1,22 @@
 -- Hands-on practice: SSMS Server Configuration
--- Status: not yet built
+
+CREATE LOGIN DemoLogin WITH PASSWORD = 'StrongP@ssw0rd!';
+GO
+
+CREATE DATABASE DemoAuthDB;
+GO
+
+USE DemoAuthDB;
+GO
+
+CREATE SCHEMA Sales AUTHORIZATION dbo;
+GO
+
+CREATE USER DemoUser FOR LOGIN DemoLogin;
+GO
+
+ALTER AUTHORIZATION ON SCHEMA::Sales TO DemoUser;
+GO
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Sales TO DemoUser;
+GO
