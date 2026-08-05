@@ -125,15 +125,6 @@ Each major topic is structured around:
 
 ---
 
-## Support files
-
-- [00_Roadmap_and_StyleGuide/roadmap.md](00_Roadmap_and_StyleGuide/roadmap.md)
-- [00_Roadmap_and_StyleGuide/style_guide.md](00_Roadmap_and_StyleGuide/style_guide.md)
-- [00_Roadmap_and_StyleGuide/glossary.md](00_Roadmap_and_StyleGuide/glossary.md)
-
-These are useful references, but the actual learning content is in the numbered modules above.
-
----
 
 ## Quick access
 
