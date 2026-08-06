@@ -116,7 +116,7 @@ SELECT StudentName FROM Student WHERE Email IS NULL;      -- correct
 
 
 -- ----------------------------------------------------------------
--- 6. System functions
+-- 6. System & GUID / Identity functions
 -- ----------------------------------------------------------------
 SELECT DB_NAME()      AS current_database,
        USER_NAME()    AS current_user,
@@ -126,11 +126,14 @@ SELECT DB_NAME()      AS current_database,
        @@SERVERNAME   AS server_name,
        GETUTCDATE()   AS utc_now;
 
--- Log an action, then confirm how many rows were affected
--- (uncomment if you have an AuditLog table to test against)
--- INSERT INTO AuditLog (TableName, ChangedBy, ChangedAtUtc)
--- VALUES ('Student', USER_NAME(), GETUTCDATE());
--- SELECT @@ROWCOUNT AS RowsInserted;
+-- GUID & Identity Generation
+SELECT NEWID() AS RandomGUID;
+
+-- SCOPE_IDENTITY() inspection
+INSERT INTO Student (StudentID, StudentName, BirthDate, Score)
+VALUES (5, 'Zane Grey', '2003-05-10', 88.0);
+
+SELECT @@ROWCOUNT AS RowsInserted, SCOPE_IDENTITY() AS LastScopeID;
 
 
 -- ----------------------------------------------------------------

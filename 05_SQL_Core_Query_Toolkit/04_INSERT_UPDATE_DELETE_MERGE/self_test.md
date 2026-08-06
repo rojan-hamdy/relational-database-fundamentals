@@ -1,52 +1,56 @@
-# Self-Test — INSERT, UPDATE, DELETE, MERGE
+# Self-Test — INSERT, UPDATE, DELETE, TRUNCATE, MERGE & SELECT INTO
 
-**Q1. Which command adds new rows to a table?**
+**Q1. What is the main difference between `INSERT INTO ... SELECT` and `SELECT INTO`?**
 
 <details>
 <summary>Show answer</summary>
-INSERT.
+`INSERT INTO ... SELECT` requires the target table to **already exist**. `SELECT INTO` creates a **new table on the fly** based on the columns and data returned by the query.
 </details>
 
-**Q2. Which command modifies existing data?**
+**Q2. When using `SELECT INTO`, which table objects/constraints are NOT copied to the new table?**
 
 <details>
 <summary>Show answer</summary>
-UPDATE.
+Primary Keys, Foreign Keys, Indexes, Triggers, Check Constraints, Default Constraints, and explicit Table Permissions are lost. (Column names, data types, nullability, and the `IDENTITY` property are copied).
 </details>
 
-**Q3. Which command removes rows?**
+**Q3. What are the key architectural differences between `TRUNCATE TABLE` and `DELETE FROM`?**
 
 <details>
 <summary>Show answer</summary>
-DELETE.
+- Category: `TRUNCATE` is DDL; `DELETE` is DML.
+- Operation: `TRUNCATE` deallocates data pages (minimally logged); `DELETE` removes rows individually (fully logged).
+- Identity: `TRUNCATE` resets identity seed; `DELETE` does not.
+- Speed: `TRUNCATE` is significantly faster on large tables.
 </details>
 
-**Q4. What does MERGE do?**
+**Q4. Can `TRUNCATE TABLE` be executed on a table referenced by a Foreign Key constraint?**
 
 <details>
 <summary>Show answer</summary>
-MERGE combines insert, update, and delete operations in one statement to synchronize tables.
+No. `TRUNCATE TABLE` cannot be run if the table is referenced by any Foreign Key constraint from another table, even if the referencing table is empty.
 </details>
 
-**Q5. Why should DELETE usually include a WHERE clause?**
+**Q5. Can `TRUNCATE TABLE` be rolled back inside an explicit transaction?**
 
 <details>
 <summary>Show answer</summary>
-Without WHERE, it may delete every row in the table.
+Yes. Contrary to popular belief, `TRUNCATE TABLE` **can be rolled back** if executed inside a `BEGIN TRANSACTION...ROLLBACK TRANSACTION` block.
 </details>
 
-**Q6. Why is MERGE often useful in ETL?**
+**Q6. What does the `MERGE` statement accomplish?**
 
 <details>
 <summary>Show answer</summary>
-It helps synchronize staging data with production tables in one operation.
+`MERGE` combines `INSERT`, `UPDATE`, and `DELETE` operations into a single atomic statement to synchronize a target table with a source table.
 </details>
 
 ---
 
 ## Quick revision
 
-- INSERT = add rows
-- UPDATE = change existing data
-- DELETE = remove rows
-- MERGE = synchronize data sets
+- **INSERT SELECT**: Appends query results into an existing table.
+- **SELECT INTO**: Creates a new table dynamically from query results.
+- **TRUNCATE**: Fast DDL page deallocation; resets identity; cannot run if referenced by FK.
+- **DELETE**: DML row-by-row removal; retains identity counter.
+- **MERGE**: Upserts and synchronizes tables in one operation.
