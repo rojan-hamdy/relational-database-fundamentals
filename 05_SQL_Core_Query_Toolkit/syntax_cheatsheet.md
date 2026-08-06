@@ -1,6 +1,5 @@
 # 🧾 SQL Syntax Cheat Sheet (Core Toolkit)
 
-> Status: ✅ Ready for quick review.
 > Purpose: one-page memory aid for the most important SQL statements in the toolkit.
 
 ## SELECT
