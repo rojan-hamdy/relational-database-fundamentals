@@ -1,7 +1,5 @@
 # Referential Integrity Actions (Cascade, Restrict, Set Null)
 
-> Status: ✅ Built as the relationship-action lesson.
-
 ## Overview
 Referential integrity ensures that a child record cannot point to a parent record that no longer exists. The database can respond to parent changes using specific actions.
 
