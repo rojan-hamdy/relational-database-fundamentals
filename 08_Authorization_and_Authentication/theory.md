@@ -187,4 +187,3 @@ and reference it with:
 
 > 🔗 **See also**
 > - [../09_Database_Security_Backbone/theory.md](../09_Database_Security_Backbone/theory.md)
-> - [../../00_Roadmap_and_StyleGuide/roadmap.md](../../00_Roadmap_and_StyleGuide/roadmap.md)
