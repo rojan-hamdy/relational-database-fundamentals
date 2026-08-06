@@ -1,122 +1,183 @@
-# CREATE, ALTER, DROP
+# Schema Management & DDL: CREATE, ALTER, DROP, Schemas & Identity Management
 
 ## Overview
-`CREATE`, `ALTER`, and `DROP` belong to the DDL group of SQL commands. They define and modify the structure of database objects such as tables, views, schemas, and databases.
+Data Definition Language (DDL) commands (`CREATE`, `ALTER`, `DROP`) define and alter the structural blueprint of database entities. Beyond tables and databases, DDL manages **Schemas** (logical containers and security boundaries) and auto-incrementing **Identity** properties.
 
 ---
 
-## 1. CREATE
+## 1. Schema Management & Organization
 
-Use `CREATE` to build a new object.
+A **Schema** in SQL Server is a logical container within a database that groups related objects (tables, views, stored procedures) and acts as a security boundary.
 
-```sql
-CREATE TABLE Student (
-    StudentID INT PRIMARY KEY,
-    StudentName VARCHAR(100),
-    Age INT
-);
+### Database Architecture & Schema Hierarchy Diagram
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│                    SQL SERVER INSTANCE                      │
+│                                                             │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                    DATABASE                           │  │
+│  │                                                       │  │
+│  │  ┌────────────────────────┐ ┌──────────────────────┐  │  │
+│  │  │     Schema: dbo        │ │    Schema: sales     │  │  │
+│  │  │ ┌────────────────────┐ │ │ ┌──────────────────┐ │  │  │
+│  │  │ │ Table: Student     │ │ │ │ Table: Customer  │ │  │  │
+│  │  │ └────────────────────┘ │ │ └──────────────────┘ │  │  │
+│  │  │ ┌────────────────────┐ │ │ ┌──────────────────┐ │  │  │
+│  │  │ │ View: v_Student    │ │ │ │ Table: Orders    │ │  │  │
+│  │  │ └────────────────────┘ │ │ └──────────────────┘ │  │  │
+│  │  └────────────────────────┘ └──────────────────────┘  │  │
+│  │                                                       │  │
+│  │  ┌────────────────────────┐ ┌──────────────────────┐  │  │
+│  │  │     Schema: hr         │ │   Schema: audit      │  │  │
+│  │  │ ┌────────────────────┐ │ │ ┌──────────────────┐ │  │  │
+│  │  │ │ Table: Employee    │ │ │ │ Table: AccessLog │ │  │  │
+│  │  │ └────────────────────┘ │ │ └──────────────────┘ │  │  │
+│  │  └────────────────────────┘ └──────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-Create a view:
+### Benefits of Using Schemas:
+1. **Namespace Management**: Allows objects in different schemas to share names (e.g., `sales.Orders` vs `purchasing.Orders`).
+2. **Security & Access Control**: Permissions can be granted at the schema level (e.g., `GRANT SELECT ON SCHEMA::sales TO SalesRole`).
+3. **Logical Separation**: Separates staging, production, or departmental data.
 
+### Schema Management Statements:
 ```sql
-CREATE VIEW v_StudentSummary AS
-SELECT StudentID, StudentName, Age
-FROM dbo.Student;
-```
-
-Create a database:
-
-```sql
-CREATE DATABASE SchoolDB;
-```
-
----
-
-## 2. ALTER
-
-Use `ALTER` to change an existing object.
-
-```sql
-ALTER TABLE Student
-ADD Email VARCHAR(150);
-```
-
-You may also change a database setting:
-
-```sql
-ALTER DATABASE SchoolDB
-SET RECOVERY SIMPLE;
-```
-
----
-
-## 3. DROP
-
-Use `DROP` to remove an object permanently.
-
-```sql
-DROP TABLE Student;
-```
-
-```sql
-DROP VIEW v_StudentSummary;
-```
-
-```sql
-DROP DATABASE SchoolDB;
-```
-
-> ⚠️ `DROP` is destructive. Use it carefully, especially in production environments.
-
----
-
-## 4. Why These Commands Matter
-
-These commands define the database shell. Without them, there would be no tables, indexes, views, or schema structure.
-
-They are part of the foundation of database modeling and administration.
-
----
-
-## 5. Typical Workflow
-
-```sql
-CREATE DATABASE DemoDB;
+-- 1. Create a new schema owned by dbo
+CREATE SCHEMA sales AUTHORIZATION dbo;
 GO
 
-USE DemoDB;
-GO
-
-CREATE TABLE Course (
-    CourseID INT PRIMARY KEY,
-    CourseName VARCHAR(100),
-    Credits INT
+-- 2. Create a table inside the sales schema
+CREATE TABLE sales.Orders (
+    OrderID INT PRIMARY KEY,
+    OrderDate DATETIME DEFAULT GETDATE(),
+    TotalAmount DECIMAL(18, 2)
 );
 GO
 
-ALTER TABLE Course
-ADD DepartmentName VARCHAR(50);
+-- 3. Transfer an existing table from 'dbo' schema to 'sales' schema
+ALTER SCHEMA sales TRANSFER dbo.Student;
 GO
 
-DROP TABLE Course;
+-- 4. Drop an empty schema
+DROP SCHEMA sales;
 GO
+```
+> ⚠️ **Note**: A schema cannot be dropped if it still contains database objects. Objects must be dropped or transferred to another schema first.
+
+---
+
+## 2. Managing Auto-Incrementing Columns (`IDENTITY`)
+
+An `IDENTITY` property automatically generates unique numeric values for new rows.
+
+### Syntax & Setup:
+```sql
+CREATE TABLE dbo.Customer (
+    -- IDENTITY(seed, increment) -> Starts at 100, increments by 1
+    CustomerID INT IDENTITY(100, 1) PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL
+);
+```
+
+### 1. `SET IDENTITY_INSERT`
+By default, SQL Server forbids manually supplying a value for an `IDENTITY` column. To explicitly insert a specific ID (e.g., data migration or missing ID re-insertion), enable `SET IDENTITY_INSERT`:
+
+```sql
+-- Enable manual identity inserts for target table
+SET IDENTITY_INSERT dbo.Customer ON;
+
+INSERT INTO dbo.Customer (CustomerID, CustomerName)
+VALUES (99, 'Legacy Account');
+
+-- MUST disable after insertion!
+SET IDENTITY_INSERT dbo.Customer OFF;
+```
+
+### 2. Inspecting & Reseeding Identity with `DBCC CHECKIDENT`
+Over time, failed transactions or deleted rows can cause gaps in identity sequences, or you may need to reset the seed after truncating/testing:
+
+```sql
+-- Check current identity value and current maximum column value
+DBCC CHECKIDENT ('dbo.Customer', NORESEED);
+
+-- Reseed the identity counter to start next row at 1000
+DBCC CHECKIDENT ('dbo.Customer', RESEED, 999);
+```
+
+### 3. Comprehensive Comparison of Identity Functions
+SQL Server provides multiple built-in functions to retrieve identity values:
+
+| Function | Scope Boundary | Session Boundary | Use Case |
+|---|---|---|---|
+| `SCOPE_IDENTITY()` | **Current Scope** | **Current Session** | **Best Practice for App Code**. Safest way to retrieve the ID generated by your `INSERT` without trigger interference. |
+| `@@IDENTITY` | **Any Scope** | **Current Session** | Returns the last identity generated anywhere in current session (can return trigger-inserted ID instead of table ID!). |
+| `IDENT_CURRENT('table')` | **Any Scope** | **Any Session** | Returns last identity for a specific table across ALL users/connections. |
+| `IDENT_SEED('table')` | N/A | N/A | Returns the configured seed value of an `IDENTITY` column. |
+| `IDENT_INCR('table')` | N/A | N/A | Returns the configured increment step of an `IDENTITY` column. |
+
+#### Code Example Comparing Identity Functions:
+```sql
+INSERT INTO dbo.Customer (CustomerName) VALUES ('New Client');
+
+-- Safest choice inside stored procedures / queries:
+SELECT SCOPE_IDENTITY() AS LastUserInsertedID;
+
+-- Check configuration:
+SELECT 
+    IDENT_SEED('dbo.Customer') AS SeedValue,
+    IDENT_INCR('dbo.Customer') AS IncrementStep,
+    IDENT_CURRENT('dbo.Customer') AS GlobalCurrentID;
 ```
 
 ---
 
-## 6. Key Takeaways
+## 3. Standard DDL Commands: CREATE, ALTER, DROP
 
-- `CREATE`: define a new object
-- `ALTER`: modify an existing object
-- `DROP`: remove an object
-- These commands change structure, not data rows
+### CREATE
+```sql
+CREATE TABLE dbo.Department (
+    DepartmentID INT PRIMARY KEY,
+    DepartmentName VARCHAR(50) NOT NULL
+);
 
-> 💡 **Core idea**
-> DDL commands are responsible for the database blueprint, while DML commands work with the actual data inside that blueprint.
+CREATE VIEW dbo.v_ActiveDepartments AS
+SELECT DepartmentID, DepartmentName
+FROM dbo.Department;
+```
+
+### ALTER
+```sql
+-- Add column
+ALTER TABLE dbo.Department
+ADD Budget DECIMAL(18, 2);
+
+-- Modify column definition
+ALTER TABLE dbo.Department
+ALTER COLUMN DepartmentName VARCHAR(100) NOT NULL;
+```
+
+### DROP
+```sql
+DROP VIEW dbo.v_ActiveDepartments;
+DROP TABLE dbo.Department;
+```
+
+---
+
+## 4. Key Takeaways
+
+- **Schemas**: Logical boundaries (`schema.object`) for organizing tables and securing access via GRANT/REVOKE.
+- **IDENTITY**: `IDENTITY(seed, increment)` auto-generates numeric keys.
+- **IDENTITY_INSERT**: Temporarily allows explicit key insertion when set to `ON`.
+- **DBCC CHECKIDENT**: Inspects or resets (`RESEED`) the auto-increment seed counter.
+- **SCOPE_IDENTITY()**: The safest function for capturing newly generated primary key IDs in application code.
 
 ---
 
 > 🔗 **See also**
 > - [../04_INSERT_UPDATE_DELETE_MERGE/theory.md](../04_INSERT_UPDATE_DELETE_MERGE/theory.md)
-> - [../syntax_cheatsheet.md](../syntax_cheatsheet.md)
+> - [../../04_Constraints_and_Integrity/PK_FK_Unique_Check_Default/theory.md](../../04_Constraints_and_Integrity/PK_FK_Unique_Check_Default/theory.md)
+> - [../../12_SSMS_Admin_and_Setup/theory.md](../../12_SSMS_Admin_and_Setup/theory.md)

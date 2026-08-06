@@ -62,10 +62,12 @@ SQL-server-complete-guide/
 - referential integrity actions
 
 ### 05_SQL_Core_Query_Toolkit
-- SELECT, WHERE, ORDER BY
+- SELECT, WHERE, ORDER BY (order of execution, LIKE pattern matching, TOP WITH TIES, CASE, IIF, NEWID)
 - JOINs
-- CREATE, ALTER, DROP
-- INSERT, UPDATE, DELETE, MERGE
+- CREATE, ALTER, DROP (schemas hierarchy & IDENTITY management)
+- INSERT, UPDATE, DELETE, MERGE (TRUNCATE deep dive, SELECT INTO, INSERT SELECT)
+- Set Operators (UNION, UNION ALL, INTERSECT, EXCEPT)
+- Subqueries (scalar, correlated, ALL, ANY/SOME, EXISTS)
 - SQL syntax cheatsheet
 
 ### 06_Aggregation_and_Analytics

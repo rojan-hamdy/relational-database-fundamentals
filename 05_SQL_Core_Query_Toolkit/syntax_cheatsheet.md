@@ -1,75 +1,129 @@
 # 🧾 SQL Syntax Cheat Sheet (Core Toolkit)
 
-> Purpose: one-page memory aid for the most important SQL statements in the toolkit.
+> Purpose: one-page quick reference for core T-SQL querying, structure, set operations, subqueries, and table manipulation.
 
-## SELECT
+---
+
+## 1. SELECT, TOP, CASE & IIF
 ```sql
-SELECT column1, column2
-FROM table_name
-WHERE condition
-ORDER BY column1 ASC;
+SELECT TOP (5) WITH TIES 
+    StudentID, 
+    StudentName, 
+    IIF(Score >= 60, 'Pass', 'Fail') AS Status,
+    CASE 
+        WHEN Score >= 90 THEN 'A'
+        WHEN Score >= 80 THEN 'B'
+        ELSE 'C'
+    END AS Grade
+FROM dbo.Student
+WHERE StudentName LIKE 'A%'
+ORDER BY Score DESC;
 ```
 
-## JOIN
-```sql
-SELECT s.col1, d.col2
-FROM TableA AS s
-INNER JOIN TableB AS d
-    ON s.key = d.key;
+---
+
+## 2. Logical Query Processing Order
+```text
+1. FROM ──► 2. ON ──► 3. JOIN ──► 4. WHERE ──► 5. GROUP BY ──►
+6. HAVING ──► 7. SELECT ──► 8. DISTINCT ──► 9. ORDER BY ──► 10. TOP / OFFSET
 ```
 
-## CREATE / ALTER / DROP
+---
+
+## 3. JOIN Syntax
 ```sql
-CREATE TABLE Student (
-    StudentID INT PRIMARY KEY,
-    StudentName VARCHAR(100)
+SELECT s.StudentName, d.DepartmentName
+FROM dbo.Student AS s
+INNER JOIN dbo.Department AS d
+    ON s.DepartmentID = d.DepartmentID;
+```
+
+---
+
+## 4. CREATE, SCHEMA & IDENTITY
+```sql
+-- Schema creation
+CREATE SCHEMA sales AUTHORIZATION dbo;
+
+-- Table with IDENTITY and Constraints
+CREATE TABLE sales.Customer (
+    CustomerID INT IDENTITY(1,1) PRIMARY KEY,
+    CustomerName VARCHAR(100) NOT NULL,
+    Email VARCHAR(150) UNIQUE
 );
 
-ALTER TABLE Student
-ADD Age INT;
-
-DROP TABLE Student;
+-- Identity Management & Inspection
+SET IDENTITY_INSERT sales.Customer ON;
+DBCC CHECKIDENT ('sales.Customer', RESEED, 100);
+SELECT SCOPE_IDENTITY() AS NewID;
 ```
 
-## INSERT / UPDATE / DELETE
+---
+
+## 5. INSERT, SELECT INTO & TRUNCATE
 ```sql
-INSERT INTO Student (StudentID, StudentName, Age)
-VALUES (1, 'Alice', 20);
+-- Insert literals
+INSERT INTO sales.Customer (CustomerName) VALUES ('Alice');
 
-UPDATE Student
-SET Age = 21
-WHERE StudentID = 1;
+-- Insert from Query
+INSERT INTO sales.CustomerArchive (CustomerID, CustomerName)
+SELECT CustomerID, CustomerName FROM sales.Customer;
 
-DELETE FROM Student
-WHERE StudentID = 1;
+-- Create Table on the fly
+SELECT CustomerID, CustomerName INTO #TempCustomer FROM sales.Customer;
+
+-- Fast Page Deallocation (Clear Table & Reset Identity)
+TRUNCATE TABLE sales.CustomerStaging;
 ```
 
-## MERGE
+---
+
+## 6. SET OPERATORS (UNION, INTERSECT, EXCEPT)
 ```sql
-MERGE INTO TargetTable AS target
-USING SourceTable AS source
-    ON target.ID = source.ID
-WHEN MATCHED THEN
-    UPDATE SET target.Name = source.Name
-WHEN NOT MATCHED BY TARGET THEN
-    INSERT (ID, Name)
-    VALUES (source.ID, source.Name)
-WHEN NOT MATCHED BY SOURCE THEN
-    DELETE;
+-- Combine & deduplicate
+SELECT City FROM Customer
+UNION
+SELECT City FROM Supplier;
+
+-- Fast combine (preserve duplicates)
+SELECT City FROM Customer
+UNION ALL
+SELECT City FROM Supplier;
+
+-- Shared rows only
+SELECT City FROM Customer
+INTERSECT
+SELECT City FROM Supplier;
+
+-- Rows in Customer NOT in Supplier
+SELECT City FROM Customer
+EXCEPT
+SELECT City FROM Supplier;
 ```
 
-## Common Query Flow
+---
+
+## 7. SUBQUERIES (ALL, ANY, EXISTS)
 ```sql
-SELECT columns
-FROM tables
-WHERE conditions
-GROUP BY columns
-HAVING conditions
-ORDER BY columns;
+-- Scalar subquery
+SELECT Name FROM Employee WHERE Salary > (SELECT AVG(Salary) FROM Employee);
+
+-- ANY / SOME (Greater than minimum)
+SELECT Name FROM Employee WHERE Salary > ANY (SELECT Salary FROM Employee WHERE Dept = 10);
+
+-- ALL (Greater than maximum)
+SELECT Name FROM Employee WHERE Salary > ALL (SELECT Salary FROM Employee WHERE Dept = 10);
+
+-- EXISTS
+SELECT DeptName FROM Department d WHERE EXISTS (SELECT 1 FROM Employee e WHERE e.Dept = d.Dept);
 ```
+
+---
 
 > 🔗 **See also**
 > - [01_SELECT_WHERE_ORDER_BY/theory.md](01_SELECT_WHERE_ORDER_BY/theory.md)
 > - [02_JOINS/theory.md](02_JOINS/theory.md)
 > - [03_CREATE_ALTER_DROP/theory.md](03_CREATE_ALTER_DROP/theory.md)
 > - [04_INSERT_UPDATE_DELETE_MERGE/theory.md](04_INSERT_UPDATE_DELETE_MERGE/theory.md)
+> - [05_Set_Operators/theory.md](05_Set_Operators/theory.md)
+> - [06_Subqueries/theory.md](06_Subqueries/theory.md)

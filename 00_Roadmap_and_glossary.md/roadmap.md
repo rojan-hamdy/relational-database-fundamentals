@@ -27,10 +27,12 @@ This file describes the actual learning flow of the repository as it currently e
    - referential integrity actions
 
 5. SQL core query toolkit
-   - SELECT, WHERE, ORDER BY
+   - SELECT, WHERE, ORDER BY (order of execution, LIKE, TOP WITH TIES, CASE, IIF, NEWID)
    - joins
-   - CREATE, ALTER, DROP
-   - INSERT, UPDATE, DELETE, MERGE
+   - CREATE, ALTER, DROP (schemas hierarchy & IDENTITY management)
+   - INSERT, UPDATE, DELETE, MERGE (TRUNCATE deep dive, SELECT INTO, INSERT SELECT)
+   - Set Operators (UNION, UNION ALL, INTERSECT, EXCEPT)
+   - Subqueries (ALL, ANY/SOME, EXISTS)
 
 6. Aggregation and analytics
    - aggregates
