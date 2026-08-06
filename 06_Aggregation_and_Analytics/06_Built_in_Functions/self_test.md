@@ -1,7 +1,5 @@
 # Self-Test — Built-in Functions (String, Date, Math, System)
 
-> Status: ✅ Ready for practice.
-
 **Q1. What are built-in SQL functions used for?**
 
 <details>
