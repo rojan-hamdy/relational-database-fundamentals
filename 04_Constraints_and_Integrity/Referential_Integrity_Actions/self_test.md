@@ -1,7 +1,5 @@
 # Self-Test — Referential Integrity Actions (Cascade, Restrict, Set Null)
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is referential integrity?**
 
 <details>
