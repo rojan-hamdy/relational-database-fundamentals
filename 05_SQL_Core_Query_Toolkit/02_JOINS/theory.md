@@ -1,7 +1,5 @@
 # JOINs (Inner, Outer, Cross, Self)
 
-> Status: ✅ Built as the relational data retrieval lesson.
-
 ## Overview
 A join is used to combine rows from two or more tables based on a related column. This is one of the most important concepts in relational database design and query writing.
 
