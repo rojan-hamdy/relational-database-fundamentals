@@ -178,21 +178,7 @@ Functional dependencies are central to determining candidate keys and understand
 
 ---
 
-## 10. Diagram Illustration
-
-If you have a normalization diagram or dependency chart, save it here:
-
-`images/functional_dependencies_diagram.png`
-
-Then use it in the file as:
-
-```markdown
-![Functional dependency diagram](images/functional_dependencies_diagram.png)
-```
-
----
-
-## 11. SSMS and T-SQL Mapping
+## 10. SSMS and T-SQL Mapping
 
 In SSMS, normalization is not a wizard-driven task as such. Instead, it is a design process:
 
@@ -206,7 +192,7 @@ The equivalent SQL implementation is usually done by creating tables with sensib
 
 ---
 
-## 12. Equivalent T-SQL Example
+## 11. Equivalent T-SQL Example
 
 ```sql
 CREATE TABLE Department (
@@ -246,7 +232,7 @@ This design follows dependency-based thinking: a student belongs to a department
 
 ---
 
-## 13. Exam-Friendly Summary
+## 12. Exam-Friendly Summary
 
 - Functional dependency = one attribute determines another
 - `A -> B` means B depends on A
@@ -262,4 +248,4 @@ This design follows dependency-based thinking: a student belongs to a department
 > 🔗 **See also**
 > - [../02_Normal_Forms_1NF_to_BCNF/theory.md](../02_Normal_Forms_1NF_to_BCNF/theory.md)
 > - [../../02_Conceptual_and_Logical_Design/03_ER_to_Relational_Mapping/theory.md](../../02_Conceptual_and_Logical_Design/03_ER_to_Relational_Mapping/theory.md)
-> - [../../00_Roadmap_and_StyleGuide/roadmap.md](../../00_Roadmap_and_StyleGuide/roadmap.md)
+
