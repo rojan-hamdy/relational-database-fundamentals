@@ -1,7 +1,5 @@
 # Self-Test — NoSQL
 
-> Status: ✅ Ready for practice.
-
 **Q1. What does NoSQL generally mean?**
 
 <details>
