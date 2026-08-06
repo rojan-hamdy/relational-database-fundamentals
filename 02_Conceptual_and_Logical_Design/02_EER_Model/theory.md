@@ -269,7 +269,7 @@ flowchart TD
 
 ## 9. Diagram Illustration
 
-![EER model diagram](images/eer%20diagram.png)
+![EER model diagram](images/eer%20diagram.jpg)
 
 This image is stored beside the lesson and helps visualize specialization, generalization, and inheritance patterns in the EER model.
 
