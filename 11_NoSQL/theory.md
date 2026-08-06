@@ -1,6 +1,5 @@
 # NoSQL
 
-> Status: ✅ Built as the NoSQL fundamentals lesson.
 
 ## Overview
 NoSQL refers to a broad family of database systems designed to handle data that does not fit naturally into the rigid relational model. These systems are often used when data is large, semi-structured, rapidly changing, or highly distributed.
