@@ -1,7 +1,5 @@
 # Built-in Functions (String, Date, Math, System)
 
-> Status: ✅ Built as the SQL utility-functions lesson.
-
 ## Overview
 SQL Server includes many built-in functions that help with string manipulation, date operations, numeric calculations, and system metadata access.
 
