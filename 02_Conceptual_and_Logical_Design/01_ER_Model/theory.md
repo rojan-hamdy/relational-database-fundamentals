@@ -128,7 +128,7 @@ Every instance must participate.
 
 ```mermaid
 flowchart LR
-    A[Department] -->|| B[Student]
+    A[Department] -->|"|| (Total)"| B[Student]
 ```
 
 #### Partial participation
@@ -292,7 +292,6 @@ Typical ER notations:
 
 ![ER model diagram](images/er%20diagram.png)
 
-This image is stored in the lesson folder and is used to visually illustrate the ER model and its relationships.
 
 ---
 
