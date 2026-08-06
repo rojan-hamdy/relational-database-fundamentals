@@ -36,21 +36,145 @@ Examples:
 
 ---
 
-## 2. Entity Representation
+## 2. Visual Notation Cheat Sheet
 
-An entity is often drawn as a rectangle.
+### 2.1 Entity representation
+An entity is usually drawn as a rectangle.
 
 ```mermaid
-classDiagram
-    class Student {
-        +StudentID
-        +FirstName
-        +LastName
-        +Age
+flowchart TD
+    A[Student]
+```
+
+A strong entity has its own independent existence. A weak entity depends on another entity for identity and is often drawn with a double rectangle or a dashed box in many textbook notations.
+
+```mermaid
+flowchart TD
+    A[Strong Entity: Student]
+    B[Weak Entity: ExamResult]
+```
+
+### 2.2 Attributes representation
+- Simple attribute: one value only
+- Composite attribute: made of smaller parts
+- Multivalued attribute: may have multiple values
+- Derived attribute: computed from another attribute
+
+```mermaid
+flowchart LR
+    E[Employee]
+    S[Simple: Name]
+    C[Composite: FullName = FirstName + LastName]
+    M[Multivalued: PhoneNumbers]
+    D[Derived: Age]
+    E --> S
+    E --> C
+    E --> M
+    E --> D
+```
+
+### 2.3 Relationship degree
+The degree of a relationship tells us how many entities participate.
+
+#### Binary relationship
+```mermaid
+flowchart LR
+    A[Student] -->|enrolls in| B[Course]
+```
+
+#### Ternary relationship
+```mermaid
+flowchart LR
+    A[Student] -->|takes| B[Course]
+    B -->|in| C[Semester]
+    A -->|during| C
+```
+
+#### Unary (recursive) relationship
+```mermaid
+flowchart LR
+    A[Employee] -->|manages| B[Employee]
+```
+
+### 2.4 Cardinality notation
+Cardinality shows how many instances of one entity relate to how many of another.
+
+#### One-to-One (1:1)
+```mermaid
+flowchart LR
+    A[Person] ---|1| B[Passport]
+    B ---|1| A
+```
+
+#### One-to-Many (1:N)
+```mermaid
+flowchart LR
+    A[Department] ---|1| B[Student]
+    B ---|many| A
+```
+
+#### Many-to-Many (M:N)
+```mermaid
+flowchart LR
+    A[Student] ---|many| B[Course]
+    B ---|many| A
+```
+
+### 2.5 Participation constraints
+Participation tells us whether every entity instance must participate in the relationship.
+
+#### Total participation
+Every instance must participate.
+
+```mermaid
+flowchart LR
+    A[Department] -->|| B[Student]
+```
+
+#### Partial participation
+Not every instance must participate.
+
+```mermaid
+flowchart LR
+    A[Employee] -->|o| B[Project]
+```
+
+### 2.6 Primary key representation
+The primary key is usually shown as underlined or labeled with PK.
+
+```mermaid
+erDiagram
+    STUDENT {
+        int StudentID PK
+        string FirstName
+        string LastName
     }
 ```
 
-A strong entity has its own independent existence. A weak entity depends on another entity for identity.
+### 2.7 Derived and multivalued attributes
+A derived attribute is shown as a computed property, while a multivalued attribute can repeat many times.
+
+```mermaid
+flowchart TD
+    E[Person]
+    B[DateOfBirth]
+    A[Age = derived]
+    M[PhoneNumbers = multivalued]
+    E --> B
+    E --> A
+    E --> M
+```
+
+### 2.8 Relationship representation in ER diagrams
+A relationship is usually shown as a diamond, and the line connects the participating entities.
+
+```mermaid
+flowchart LR
+    A[Student] -->|enrolls in| B[Course]
+```
+
+> 💡 **Visual rule**
+> In ER modeling, the structure is drawn first; the table design comes later after mapping.
 
 ---
 
