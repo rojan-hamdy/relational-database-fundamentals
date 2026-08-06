@@ -251,4 +251,3 @@ GO
 > 🔗 **See also**
 > - [../01_DDL_DML_DCL_TCL/theory.md](../01_DDL_DML_DCL_TCL/theory.md)
 > - [../03_Relational_Data_Model/theory.md](../03_Relational_Data_Model/theory.md)
-> - [../../00_Roadmap_and_StyleGuide/roadmap.md](../../00_Roadmap_and_StyleGuide/roadmap.md)
