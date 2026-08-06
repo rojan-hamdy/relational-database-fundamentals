@@ -1,7 +1,5 @@
 # PK, FK, Unique, Check, Default Constraints
 
-> Status: ✅ Built as the data-integrity constraints lesson.
-
 ## Overview
 Database constraints enforce rules on stored data so that values remain valid, consistent, and aligned with business rules.
 
