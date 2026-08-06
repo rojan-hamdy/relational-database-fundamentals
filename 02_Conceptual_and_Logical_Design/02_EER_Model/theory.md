@@ -227,12 +227,12 @@ The same cardinality and participation ideas from ER are reused in EER diagrams.
 
 ```mermaid
 flowchart LR
-    D[Department] -->|| S[Student]
+   D[Department] -->|"||"| S[Student]
 ```
 
 ```mermaid
 flowchart LR
-    A[Employee] -->|1| B[Project]
+    A[Employee] -->|"1"| B[Project]
 ```
 
 ### 8.7 Primary key and inherited attributes
