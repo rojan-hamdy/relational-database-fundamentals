@@ -217,4 +217,4 @@ CREATE TABLE Customer (
 > 🔗 **See also**
 > - [../01_ER_Model/theory.md](../01_ER_Model/theory.md)
 > - [../04_EER_to_Relational_Mapping/theory.md](../04_EER_to_Relational_Mapping/theory.md)
-> - [../../00_Roadmap_and_StyleGuide/roadmap.md](../../00_Roadmap_and_StyleGuide/roadmap.md)
+
