@@ -232,4 +232,3 @@ Equivalent document model concept (JSON-like):
 > 🔗 **See also**
 > - [../01_Foundations/03_Relational_Data_Model/theory.md](../01_Foundations/03_Relational_Data_Model/theory.md)
 > - [../03_Normalization/01_Functional_Dependencies/theory.md](../03_Normalization/01_Functional_Dependencies/theory.md)
-> - [../00_Roadmap_and_StyleGuide/roadmap.md](../00_Roadmap_and_StyleGuide/roadmap.md)
