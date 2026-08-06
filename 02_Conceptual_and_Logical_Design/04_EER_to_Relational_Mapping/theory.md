@@ -131,7 +131,7 @@ Customer(PersonID PK/FK, MembershipNumber)
 
 ## 7. Diagram Illustration
 
-![EER to relational mapping diagram](images/eer%20to%20relational%20mapping.png)
+![EER to relational mapping diagram](images/eer%20to%20relational%20mapping.jpg)
 
 This visual clarifies how superclass and subclass relationships become separate relational tables while preserving inheritance rules.
 
