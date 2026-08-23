@@ -183,14 +183,86 @@ SELECT StudentName,
 FROM dbo.Student;
 ```
 
+| StudentName | CleanedName | Age | ScoreRounded | BestContact | SourceDatabase |
+|---|---|---|---|---|---|
+| alice smith | ALICE SMITH | 25 | 87.46 | alice@mail.com | SchoolDB |
+| Bob Khan    | BOB KHAN    | 25 | 92.10 | 010-555-1234   | SchoolDB |
+| nora ali    | NORA ALI    | 24 | 78.00 | nora@mail.com  | SchoolDB |
+
+One query, one pass over the table, and every messy or missing value is cleaned, computed, or substituted — this is the everyday shape of a reporting query.
+
 ---
 
-## 8. Summary
+## 8. How to discover details about other functions
 
-- **String & Date Functions**: Format, extract, clean, and compute intervals.
-- **NULL Handling**: `COALESCE` (portable) and `ISNULL` prevent unexpected missing data failures.
-- **GUID Generation**: `NEWID()` generates random GUIDs (ideal for distributed systems or random sorting); `NEWSEQUENTIALID()` generates sequential GUIDs for low-fragmentation indexes.
-- **Identity Functions**: `SCOPE_IDENTITY()` captures newly inserted IDs safely without trigger interference.
+The functions above are only a fraction of what SQL Server ships with. Instead of memorizing every one, it's more useful to know how to look them up when you need one you haven't used before.
+
+### a) Ask the database itself
+
+SQL Server exposes its own function catalog as system views you can query directly:
+
+```sql
+-- List every built-in and user-defined function, with its type
+SELECT name, type_desc
+FROM sys.objects
+WHERE type IN ('FN', 'IF', 'TF', 'FS', 'FT')  -- scalar, inline table-valued, table-valued, CLR, etc.
+ORDER BY name;
+
+-- Search for functions whose name contains a keyword (e.g. all date-related ones)
+SELECT name
+FROM sys.objects
+WHERE type IN ('FN', 'IF', 'TF')
+  AND name LIKE '%DATE%';
+```
+
+```sql
+-- Get the parameter list and return type of a specific function
+SELECT p.name AS ParameterName, t.name AS DataType, p.is_output
+FROM sys.parameters p
+JOIN sys.types t ON p.system_type_id = t.system_type_id
+WHERE p.object_id = OBJECT_ID('dbo.MyFunction');
+```
+
+Note: `sys.objects` mainly surfaces **user-defined** functions well; SQL Server's *built-in* functions (like `GETDATE`, `ROUND`, `COALESCE`) are part of the engine itself and won't all appear there — for those, the official docs (below) are the reliable source.
+
+### b) Use SSMS / Azure Data Studio IntelliSense
+
+- Start typing a function name and pause — IntelliSense shows a tooltip with its parameter list and a short description.
+- Highlight a function name and press **Shift+F1** (SSMS) to jump straight to its documentation page in the browser.
+- The **Object Explorer** → `Programmability` → `Functions` → `System Functions` node lists every built-in function grouped by category (String, Date and Time, Mathematical, System, etc.) for the connected SQL Server version.
+
+### c) Check the official Microsoft documentation
+
+The most complete and version-accurate reference is Microsoft Learn's **Built-in Functions (Transact-SQL)** page, organized by the same categories used in this document (String, Date and Time, Mathematical, Logical, System, Conversion, and more). It lists every function's exact syntax, arguments, return type, and compatibility notes per SQL Server version:
+`https://learn.microsoft.com/en-us/sql/t-sql/functions/functions`
+
+When in doubt about a function's exact behavior (especially edge cases like `NULL` handling, rounding direction, or locale-dependent formatting), check this page rather than assuming — behavior sometimes differs subtly between SQL Server versions or between SQL Server and other database engines (MySQL, PostgreSQL, Oracle).
+
+### d) Quick sanity-check pattern
+
+For any unfamiliar function, run it standalone with a couple of test values before using it in a real query — this is faster than reading docs for simple cases and confirms exact behavior (rounding, `NULL` handling, return type) in your specific SQL Server version:
+
+```sql
+SELECT SOME_FUNCTION('test input') AS Result;
+```
+
+---
+
+## 9. Why functions matter
+Built-in functions save time by reducing manual code and making queries more expressive. They are essential for reporting, data cleaning, validation, and safely handling incomplete data — pushing that logic into the database instead of application code.
+
+---
+
+## 10. Summary
+SQL built-ins help you:
+- reshape and clean strings,
+- work with dates and calculate durations,
+- calculate and round numeric values,
+- substitute or detect missing (`NULL`) data safely,
+- access system and session context.
+
+> 💡 **Core idea**
+> Built-in functions simplify everyday SQL logic — string cleanup, date math, number formatting, `NULL` handling, and system metadata — and make reporting and data processing far easier and more reliable.
 
 ---
 
