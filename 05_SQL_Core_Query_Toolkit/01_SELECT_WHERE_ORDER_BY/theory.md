@@ -1,15 +1,13 @@
 # SELECT, WHERE, ORDER BY & Query Fundamentals
 
 ## Overview
-The `SELECT` statement is the core of SQL data retrieval. It extracts rows and columns from database tables, filters them using conditions in `WHERE`, applies conditional logic, restricts result sizes with `TOP`, and formats output using `ORDER BY`.
-
-Understanding how SQL processes queries logically—rather than how they are written—is essential for writing correct and optimized queries.
+The `SELECT` statement is the core of SQL data retrieval. It extracts rows and columns from database tables, filters them using conditions in `WHERE`, applies conditional logic, restricts result sizes, and formats output using `ORDER BY`.
 
 ---
 
 ## 1. Logical Query Processing (Order of Execution)
 
-Although a query is written starting with `SELECT`, SQL Server evaluates clauses in a specific **logical query processing sequence**:
+Although a query is written starting with `SELECT`, database engines evaluate clauses in a specific **logical query processing sequence**:
 
 ```text
 Logical Execution Order:
@@ -30,7 +28,7 @@ Logical Execution Order:
 ```
 
 ### Key Implications of Execution Order
-- **Column Aliases in WHERE**: You **cannot** use a column alias defined in `SELECT` inside a `WHERE` clause because `WHERE` (step 4) executes *before* `SELECT` (step 7).
+* **Column Aliases in `WHERE`**: You **cannot** use a column alias defined in `SELECT` inside a `WHERE` clause because `WHERE` (step 4) executes *before* `SELECT` (step 7).
   ```sql
   -- ❌ FAILS: MonthlySalary is evaluated in step 7, after step 4
   SELECT Salary / 12 AS MonthlySalary
@@ -42,139 +40,135 @@ Logical Execution Order:
   FROM Employee
   WHERE (Salary / 12) > 5000;
   ```
-- **ORDER BY Can Use Aliases**: `ORDER BY` (step 9) executes *after* `SELECT` (step 7), so sorting by column aliases is allowed.
+* **`ORDER BY` Can Use Aliases**: `ORDER BY` (step 9) executes *after* `SELECT` (step 7), so sorting by column aliases is allowed in both T-SQL and PostgreSQL.
 
 ---
 
-## 2. SELECT
+## 2. SELECT & Projection
 
 `SELECT` projects the required columns from a table:
 
+### SQL Server & PostgreSQL Syntax
 ```sql
 SELECT StudentID, StudentName
-FROM dbo.Student;
+FROM Student;
 ```
 
-To retrieve all columns:
-```sql
-SELECT *
-FROM dbo.Student;
-```
 > ⚠️ **Best Practice**: Avoid `SELECT *` in production applications. It increases network I/O, prevents index-only covering queries, and can break applications if table schemas change.
 
 ---
 
-## 3. Filtering Rows with WHERE
+## 3. Pattern Matching with `LIKE`
 
-`WHERE` filters rows based on logical expressions evaluating to `TRUE`, `FALSE`, or `UNKNOWN`.
+### Wildcard Reference
+| Wildcard | Meaning | SQL Server Example | PostgreSQL Equivalent |
+| :--- | :--- | :--- | :--- |
+| `%` | Any sequence of zero or more characters | `'A%'` | `'A%'` |
+| `_` | Exactly one single character | `'A_i'` | `'A_i'` |
+| `[a-z]` | Range or set of characters | `'[M-N]x'` | `~ '^[M-N]x'` (Regex) |
+| `[^a-z]` | NOT within range or set | `'[^A-C]%'` | `!~ '^[A-C]'` (Regex) |
 
-```sql
-SELECT StudentID, StudentName, Age
-FROM dbo.Student
-WHERE Age >= 20;
-```
+### Code Examples
 
----
-
-## 4. Pattern Matching with the `LIKE` Operator
-
-The `LIKE` operator searches for specified string patterns using wildcard characters.
-
-### Wildcard reference:
-| Wildcard | Meaning | Example | Matches |
-|---|---|---|---|
-| `%` | Any sequence of zero or more characters | `'A%'` | `Alice`, `Adam`, `A` |
-| `_` | Exactly one single character | `'A_i'` | `Ali`, `Avi` (not `Alice`) |
-| `[a-z]` | Any single character within the specified range/set | `'[M-N]x'` | `Mx`, `Nx` |
-| `[^a-z]` | Any single character NOT within the specified set | `'[^A-C]%'` | `David`, `Ethan` |
-
-### Code Examples:
+#### SQL Server (T-SQL)
 ```sql
 -- Names starting with 'A'
 SELECT * FROM Student WHERE StudentName LIKE 'A%';
 
--- Names ending with 'son'
-SELECT * FROM Student WHERE StudentName LIKE '%son';
-
--- Second letter must be 'o'
+-- Names with 'o' as second letter
 SELECT * FROM Student WHERE StudentName LIKE '_o%';
 
--- First character starts with A, B, or C
+-- First letter A, B, or C (Character Class)
 SELECT * FROM Student WHERE StudentName LIKE '[A-C]%';
 ```
 
-### Searching Literal Wildcards using `ESCAPE`
-If you need to search for text containing an actual `%` or `_`, use the `ESCAPE` clause:
+#### PostgreSQL
 ```sql
--- Search for discount values containing '10%'
-SELECT * FROM Promotion 
-WHERE PromoCode LIKE '%10\%' ESCAPE '\';
+-- Standard wildcards are identical:
+SELECT * FROM Student WHERE StudentName LIKE 'A%';
+
+-- For character classes or complex patterns, PostgreSQL uses Regular Expressions (~):
+SELECT * FROM Student WHERE StudentName ~ '^[A-C]';
 ```
-
-### Performance & SARGability Note:
-- `LIKE 'ABC%'` is **SARGable** (Search Argument Able); SQL Server can use an index seek on the column.
-- `LIKE '%ABC'` is **non-SARGable**; SQL Server must scan the entire table/index row-by-row.
-
-> 🔍 **Where to find more advanced text search?**
-> For complex document search, stemming, or fuzzy matching across millions of rows, use **SQL Server Full-Text Search** (`CONTAINS`, `FREETEXT`), which uses dedicated full-text indexes instead of `LIKE`.
 
 ---
 
-## 5. Limiting Results with `TOP` & `TOP WITH TIES`
+## 4. Limiting Result Sets: `TOP` vs `LIMIT`
 
-`TOP` restricts the number or percentage of rows returned by a query.
-
-### Syntax & Usage:
+### A. SQL Server (T-SQL) Syntax
 ```sql
--- Top 3 highest scores
+-- Return top 3 highest scoring students
 SELECT TOP (3) StudentID, StudentName, Score
 FROM Student
 ORDER BY Score DESC;
 
--- Top 10 percent of rows
+-- Return top 10 percent of rows
 SELECT TOP (10) PERCENT StudentID, StudentName, Score
 FROM Student
 ORDER BY Score DESC;
-
--- Parameterized TOP
-DECLARE @n INT = 5;
-SELECT TOP (@n) * FROM Student ORDER BY StudentID;
 ```
 
-### `TOP WITH TIES`
-If multiple rows share the same value in the `ORDER BY` column as the last qualifying row, `WITH TIES` includes all tied rows in the output.
-
-> ⚠️ **Requirement**: `TOP WITH TIES` **requires** an `ORDER BY` clause.
-
+### B. PostgreSQL Syntax
 ```sql
--- Table has scores: 100, 95, 90, 90, 85
--- Without WITH TIES: Returns exactly 3 rows (100, 95, 90)
--- With WITH TIES: Returns 4 rows because the two '90' scores tie for 3rd place!
+-- PostgreSQL uses LIMIT / OFFSET syntax (ANSI Standard)
+SELECT StudentID, StudentName, Score
+FROM Student
+ORDER BY Score DESC
+LIMIT 3;
 
+-- OFFSET pagination in PostgreSQL
+SELECT StudentID, StudentName, Score
+FROM Student
+ORDER BY Score DESC
+LIMIT 3 OFFSET 3;
+```
+> ℹ️ **PostgreSQL Note**: PostgreSQL does not use `TOP (N)`. It uses `LIMIT N` or ANSI `FETCH FIRST N ROWS ONLY`.
+
+---
+
+## 5. Handling Ties: `TOP WITH TIES` vs `FETCH WITH TIES`
+
+If multiple rows share the same value in the `ORDER BY` column as the last qualifying row, `WITH TIES` includes all tied rows.
+
+### Execution Walkthrough
+
+**Initial Dataset: `Student` Table**
+| StudentID | StudentName | Score |
+| :--- | :--- | :--- |
+| **101** | Alice | **100** |
+| **102** | Bob | **95** |
+| **103** | Charlie | **90** |
+| **104** | David | **90** |
+| **105** | Emma | **85** |
+
+### SQL Server (T-SQL)
+```sql
 SELECT TOP (3) WITH TIES StudentID, StudentName, Score
 FROM Student
 ORDER BY Score DESC;
 ```
 
----
-
-## 6. Conditional Logic: `CASE` Expression & `IIF`
-
-SQL Server provides conditional evaluation within queries.
-
-### Simple `CASE` (Matches exact values)
+### PostgreSQL (PostgreSQL 13+)
 ```sql
-SELECT StudentName, DepartmentID,
-    CASE DepartmentID
-        WHEN 10 THEN 'Computer Science'
-        WHEN 20 THEN 'Mathematics'
-        WHEN 30 THEN 'Physics'
-        ELSE 'General Studies'
-    END AS DepartmentName
-FROM Student;
+SELECT StudentID, StudentName, Score
+FROM Student
+ORDER BY Score DESC
+FETCH FIRST 3 ROWS WITH TIES;
 ```
 
-### Searched `CASE` (Evaluates boolean expressions in order)
+#### Expected Output (Both Engines):
+| StudentID | StudentName | Score | Notes |
+| :--- | :--- | :--- | :--- |
+| **101** | Alice | **100** | Rank 1 |
+| **102** | Bob | **95** | Rank 2 |
+| **103** | Charlie | **90** | Rank 3 |
+| **104** | David | **90** | **Included due to tie with Charlie at Score = 90!** |
+
+---
+
+## 6. Conditional Logic: `CASE` & `IIF`
+
+### A. Searched `CASE` Expression (Identical in SQL Server & PostgreSQL)
 ```sql
 SELECT StudentName, Score,
     CASE 
@@ -186,63 +180,58 @@ SELECT StudentName, Score,
 FROM Student;
 ```
 
-### `IIF()` Ternary Function
-`IIF(boolean_expression, true_value, false_value)` is a shorthand ternary syntax for a two-way `CASE` expression.
+### B. Inline Ternary: `IIF()`
 
+#### SQL Server (T-SQL)
 ```sql
--- Simple pass/fail indicator
+-- Shorthand ternary evaluation
 SELECT StudentName, Score,
     IIF(Score >= 60, 'Pass', 'Fail') AS Status
 FROM Student;
+```
 
--- IIF inside ORDER BY for dynamic sorting
-SELECT StudentName, Age
-FROM Student
-ORDER BY IIF(Age >= 20, 1, 2), StudentName;
+#### PostgreSQL
+```sql
+-- PostgreSQL does not have IIF(); use standard CASE expression instead:
+SELECT StudentName, Score,
+    CASE WHEN Score >= 60 THEN 'Pass' ELSE 'Fail' END AS Status
+FROM Student;
 ```
 
 ---
 
-## 7. Random Sorting with `NEWID()`
+## 7. Shuffling / Random Sorting
 
-To retrieve a random row or shuffle a result set, sort by `NEWID()` (which generates a unique GUID for every row evaluated):
-
+### SQL Server (T-SQL)
 ```sql
--- Pick a random winner from qualifying students
+-- Select 1 random winning student
 SELECT TOP (1) StudentID, StudentName
 FROM Student
-WHERE Score >= 80
 ORDER BY NEWID();
 ```
 
----
-
-## 8. Putting It Together
-
+### PostgreSQL
 ```sql
-SELECT TOP (5) WITH TIES
-    StudentID, 
-    StudentName, 
-    Score,
-    IIF(Score >= 50, 'Passed', 'Failed') AS ResultStatus,
-    CASE 
-        WHEN StudentName LIKE 'A%' THEN 'Group Alpha'
-        ELSE 'Group Standard'
-    END AS StudentGroup
-FROM dbo.Student
-WHERE Score IS NOT NULL
-ORDER BY Score DESC;
+-- Select 1 random winning student
+SELECT StudentID, StudentName
+FROM Student
+ORDER BY RANDOM()
+LIMIT 1;
 ```
+> ℹ️ **Engine Difference**: SQL Server uses `NEWID()`, while PostgreSQL uses `RANDOM()`.
 
 ---
 
-## 9. Key Takeaways
+## 8. Summary Matrix
 
-- **Order of Execution**: `FROM` → `WHERE` → `SELECT` → `ORDER BY` → `TOP`. Alias defined in `SELECT` cannot be used in `WHERE`.
-- **LIKE Pattern Matching**: `%` (many chars), `_` (one char), `[...]` (set), `ESCAPE` for literal search. Leading wildcards (`'%abc'`) disable index seeks.
-- **TOP WITH TIES**: Returns extra rows if there are ties at the cutoff boundary (requires `ORDER BY`).
-- **CASE & IIF**: Enable inline conditional logic in queries.
-- **NEWID() Sorting**: `ORDER BY NEWID()` produces random row ordering.
+| Query Concept | SQL Server (T-SQL) | PostgreSQL |
+| :--- | :--- | :--- |
+| **Logical Order of Execution** | `FROM` → `WHERE` → `SELECT` → `ORDER BY` | `FROM` → `WHERE` → `SELECT` → `ORDER BY` |
+| **Limit Row Count** | `TOP (N)` | `LIMIT N` or `FETCH FIRST N ROWS ONLY` |
+| **Include Tied Cutoff Rows** | `TOP (N) WITH TIES` | `FETCH FIRST N ROWS WITH TIES` |
+| **Ternary If** | `IIF(cond, true, false)` | `CASE WHEN cond THEN true ELSE false END` |
+| **Random Sorting** | `ORDER BY NEWID()` | `ORDER BY RANDOM()` |
+| **Character Class Matching** | `LIKE '[A-Z]%'` | `~ '^[A-Z]'` (Regex) |
 
 ---
 
@@ -250,4 +239,3 @@ ORDER BY Score DESC;
 > - [../02_JOINS/theory.md](../02_JOINS/theory.md)
 > - [../05_Set_Operators/theory.md](../05_Set_Operators/theory.md)
 > - [../06_Subqueries/theory.md](../06_Subqueries/theory.md)
-> - [../syntax_cheatsheet.md](../syntax_cheatsheet.md)

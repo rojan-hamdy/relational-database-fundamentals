@@ -1,92 +1,80 @@
 # GROUP BY & HAVING
 
 ## Overview
-`GROUP BY` partitions rows into groups, and aggregate functions are then applied to each group. `HAVING` filters those grouped results after aggregation.
+`GROUP BY` partitions individual rows into summary groups based on shared column values. Aggregate functions are then computed for each group. `HAVING` filters those aggregated group summary rows.
 
 ---
 
-## 1. GROUP BY
+## 1. Logical Execution Flow: WHERE vs GROUP BY vs HAVING
 
-```sql
-SELECT DepartmentID, COUNT(*) AS NumberOfStudents
-FROM dbo.Student
-GROUP BY DepartmentID;
+```text
+┌─────────────────────────────────────────────────────────────┐
+│ 1. WHERE      Filters individual rows BEFORE grouping      │
+│               (e.g., WHERE Age >= 20)                       │
+├─────────────────────────────────────────────────────────────┤
+│ 2. GROUP BY   Splits remaining rows into summary buckets    │
+│               (e.g., GROUP BY DepartmentID)                 │
+├─────────────────────────────────────────────────────────────┤
+│ 3. HAVING     Filters summary buckets AFTER aggregation     │
+│               (e.g., HAVING COUNT(*) >= 2)                  │
+└─────────────────────────────────────────────────────────────┘
 ```
-
-This groups students by department and counts how many appear in each group.
 
 ---
 
-## 2. HAVING
+## 2. Baseline Data for GROUP BY Examples
 
-`HAVING` filters result groups after aggregation.
-
-```sql
-SELECT DepartmentID, COUNT(*) AS NumberOfStudents
-FROM dbo.Student
-GROUP BY DepartmentID
-HAVING COUNT(*) > 1;
-```
-
-This returns only departments with more than one student.
+**`Student` Table**
+| StudentID | StudentName | DepartmentID | Age |
+| :--- | :--- | :--- | :--- |
+| **1** | Alice | **10** | **22** |
+| **2** | Bob | **10** | **25** |
+| **3** | Charlie | **20** | **19** |
+| **4** | Dana | **30** | **21** |
 
 ---
 
-## 3. Example dataset
+## 3. Query Execution Walkthrough
 
 ```sql
-CREATE TABLE Student (
-    StudentID INT PRIMARY KEY,
-    StudentName VARCHAR(100),
-    DepartmentID INT,
-    Age INT
-);
-
-INSERT INTO Student (StudentID, StudentName, DepartmentID, Age)
-VALUES (1, 'Alice', 10, 22),
-       (2, 'Bob', 10, 25),
-       (3, 'Charlie', 20, 19),
-       (4, 'Dana', 30, 21);
-```
-
-```sql
-SELECT DepartmentID, AVG(Age) AS AvgAge
+SELECT DepartmentID, AVG(Age) AS AvgAge, COUNT(*) AS TotalStudents
 FROM Student
-GROUP BY DepartmentID;
-```
-
-```sql
-SELECT DepartmentID, AVG(Age) AS AvgAge
-FROM Student
-GROUP BY DepartmentID
-HAVING AVG(Age) >= 20;
-```
-
----
-
-## 4. Difference between WHERE and HAVING
-
-- `WHERE` filters rows before grouping
-- `HAVING` filters groups after aggregation
-
-```sql
-SELECT DepartmentID, COUNT(*) AS Total
-FROM Student
-WHERE Age >= 18
+WHERE Age >= 20
 GROUP BY DepartmentID
 HAVING COUNT(*) >= 2;
 ```
 
+### Execution Steps:
+1. **`WHERE Age >= 20`**: Drops `Charlie` (Age 19). Remaining students: `Alice` (22), `Bob` (25), `Dana` (21).
+2. **`GROUP BY DepartmentID`**:
+   * **Group 10**: `Alice` (22), `Bob` (25) $\rightarrow$ `AvgAge = 23.5`, `Count = 2`
+   * **Group 30**: `Dana` (21) $\rightarrow$ `AvgAge = 21.0`, `Count = 1`
+3. **`HAVING COUNT(*) >= 2`**: Drops **Group 30** (`Count = 1`).
+
+#### Final Output:
+| DepartmentID | AvgAge | TotalStudents |
+| :--- | :--- | :--- |
+| **10** | **23.5** | **2** |
+
 ---
 
-## 5. Key takeaways
+## 4. PostgreSQL Comparison & Compatibility
 
-- `GROUP BY` organizes rows into meaningful groups
-- aggregate functions summarize those groups
-- `HAVING` filters the grouped result set
+| Feature | SQL Server (T-SQL) | PostgreSQL | Notes |
+| :--- | :--- | :--- | :--- |
+| **`GROUP BY` Clause** | ✅ Supported | ✅ Supported | 100% ANSI standard |
+| **`HAVING` Clause** | ✅ Supported | ✅ Supported | 100% ANSI standard |
+| **Non-grouped columns in `SELECT`** | ❌ Blocked (Must be in `GROUP BY` or aggregated) | ❌ Blocked (Must be in `GROUP BY` or aggregated) | Both engines strictly enforce ANSI compliance |
+| **Primary Key Functional Dependency** | ❌ Requires grouping all SELECT cols | ✅ Allows non-grouped PK columns | PostgreSQL allows omitting columns if Primary Key is in `GROUP BY` |
 
-> 💡 **Core idea**
-> `GROUP BY` and `HAVING` are the standard way to answer questions like “How many students are in each department?” or “Which departments have more than 10 students?”
+---
+
+## 5. Key Takeaways
+
+- **`WHERE`**: Filters row-by-row before grouping takes place.
+- **`GROUP BY`**: Collapses rows sharing identical group key values.
+- **`HAVING`**: Filters summarized groups based on aggregate results (e.g. `HAVING COUNT(*) > 5`).
+- **Rule**: Every non-aggregated column in `SELECT` must be included in `GROUP BY`.
 
 ---
 

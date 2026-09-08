@@ -7,45 +7,26 @@ Data Definition Language (DDL) commands (`CREATE`, `ALTER`, `DROP`) define and a
 
 ## 1. Schema Management & Organization
 
-A **Schema** in SQL Server is a logical container within a database that groups related objects (tables, views, stored procedures) and acts as a security boundary.
-
-### Database Architecture & Schema Hierarchy Diagram
+A **Schema** is a logical container within a database that groups related objects (tables, views, stored procedures) and acts as a security boundary.
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│                    SQL SERVER INSTANCE                      │
+│                    DATABASE INSTANCE                        │
 │                                                             │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │                    DATABASE                           │  │
-│  │                                                       │  │
-│  │  ┌────────────────────────┐ ┌──────────────────────┐  │  │
-│  │  │     Schema: dbo        │ │    Schema: sales     │  │  │
-│  │  │ ┌────────────────────┐ │ │ ┌──────────────────┐ │  │  │
-│  │  │ │ Table: Student     │ │ │ │ Table: Customer  │ │  │  │
-│  │  │ └────────────────────┘ │ │ └──────────────────┘ │  │  │
-│  │  │ ┌────────────────────┐ │ │ ┌──────────────────┐ │  │  │
-│  │  │ │ View: v_Student    │ │ │ │ Table: Orders    │ │  │  │
-│  │  │ └────────────────────┘ │ │ └──────────────────┘ │  │  │
-│  │  └────────────────────────┘ └──────────────────────┘  │  │
-│  │                                                       │  │
-│  │  ┌────────────────────────┐ ┌──────────────────────┐  │  │
-│  │  │     Schema: hr         │ │   Schema: audit      │  │  │
-│  │  │ ┌────────────────────┐ │ │ ┌──────────────────┐ │  │  │
-│  │  │ │ Table: Employee    │ │ │ │ Table: AccessLog │ │  │  │
-│  │  │ └────────────────────┘ │ │ └──────────────────┘ │  │  │
-│  │  └────────────────────────┘ └──────────────────────┘  │  │
-│  └───────────────────────────────────────────────────────┘  │
+│  ┌────────────────────────┐ ┌──────────────────────────┐    │
+│  │     Schema: dbo        │ │      Schema: sales       │    │
+│  │ ┌────────────────────┐ │ │ ┌──────────────────────┐ │    │
+│  │ │ Table: Student     │ │ │ │ Table: Orders        │ │    │
+│  │ └────────────────────┘ │ │ └──────────────────────┘ │    │
+│  └────────────────────────┘ └──────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Benefits of Using Schemas:
-1. **Namespace Management**: Allows objects in different schemas to share names (e.g., `sales.Orders` vs `purchasing.Orders`).
-2. **Security & Access Control**: Permissions can be granted at the schema level (e.g., `GRANT SELECT ON SCHEMA::sales TO SalesRole`).
-3. **Logical Separation**: Separates staging, production, or departmental data.
+### Schema Statements: T-SQL vs PostgreSQL
 
-### Schema Management Statements:
+#### SQL Server (T-SQL)
 ```sql
--- 1. Create a new schema owned by dbo
+-- 1. Create a new schema
 CREATE SCHEMA sales AUTHORIZATION dbo;
 GO
 
@@ -57,127 +38,115 @@ CREATE TABLE sales.Orders (
 );
 GO
 
--- 3. Transfer an existing table from 'dbo' schema to 'sales' schema
+-- 3. Transfer an existing table from 'dbo' to 'sales'
 ALTER SCHEMA sales TRANSFER dbo.Student;
 GO
-
--- 4. Drop an empty schema
-DROP SCHEMA sales;
-GO
 ```
-> ⚠️ **Note**: A schema cannot be dropped if it still contains database objects. Objects must be dropped or transferred to another schema first.
 
----
-
-## 2. Managing Auto-Incrementing Columns (`IDENTITY`)
-
-An `IDENTITY` property automatically generates unique numeric values for new rows.
-
-### Syntax & Setup:
+#### PostgreSQL Syntax
 ```sql
-CREATE TABLE dbo.Customer (
-    -- IDENTITY(seed, increment) -> Starts at 100, increments by 1
-    CustomerID INT IDENTITY(100, 1) PRIMARY KEY,
-    CustomerName VARCHAR(100) NOT NULL
+-- 1. Create schema
+CREATE SCHEMA sales AUTHORIZATION postgres;
+
+-- 2. Create table in schema
+CREATE TABLE sales.Orders (
+    OrderID INT PRIMARY KEY,
+    OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    TotalAmount DECIMAL(18, 2)
 );
+
+-- 3. Change table schema in PostgreSQL
+ALTER TABLE public.Student SET SCHEMA sales;
 ```
-
-### 1. `SET IDENTITY_INSERT`
-By default, SQL Server forbids manually supplying a value for an `IDENTITY` column. To explicitly insert a specific ID (e.g., data migration or missing ID re-insertion), enable `SET IDENTITY_INSERT`:
-
-```sql
--- Enable manual identity inserts for target table
-SET IDENTITY_INSERT dbo.Customer ON;
-
-INSERT INTO dbo.Customer (CustomerID, CustomerName)
-VALUES (99, 'Legacy Account');
-
--- MUST disable after insertion!
-SET IDENTITY_INSERT dbo.Customer OFF;
-```
-
-### 2. Inspecting & Reseeding Identity with `DBCC CHECKIDENT`
-Over time, failed transactions or deleted rows can cause gaps in identity sequences, or you may need to reset the seed after truncating/testing:
-
-```sql
--- Check current identity value and current maximum column value
-DBCC CHECKIDENT ('dbo.Customer', NORESEED);
-
--- Reseed the identity counter to start next row at 1000
-DBCC CHECKIDENT ('dbo.Customer', RESEED, 999);
-```
-
-### 3. Comprehensive Comparison of Identity Functions
-SQL Server provides multiple built-in functions to retrieve identity values:
-
-| Function | Scope Boundary | Session Boundary | Use Case |
-|---|---|---|---|
-| `SCOPE_IDENTITY()` | **Current Scope** | **Current Session** | **Best Practice for App Code**. Safest way to retrieve the ID generated by your `INSERT` without trigger interference. |
-| `@@IDENTITY` | **Any Scope** | **Current Session** | Returns the last identity generated anywhere in current session (can return trigger-inserted ID instead of table ID!). |
-| `IDENT_CURRENT('table')` | **Any Scope** | **Any Session** | Returns last identity for a specific table across ALL users/connections. |
-| `IDENT_SEED('table')` | N/A | N/A | Returns the configured seed value of an `IDENTITY` column. |
-| `IDENT_INCR('table')` | N/A | N/A | Returns the configured increment step of an `IDENTITY` column. |
-
-#### Code Example Comparing Identity Functions:
-```sql
-INSERT INTO dbo.Customer (CustomerName) VALUES ('New Client');
-
--- Safest choice inside stored procedures / queries:
-SELECT SCOPE_IDENTITY() AS LastUserInsertedID;
-
--- Check configuration:
-SELECT 
-    IDENT_SEED('dbo.Customer') AS SeedValue,
-    IDENT_INCR('dbo.Customer') AS IncrementStep,
-    IDENT_CURRENT('dbo.Customer') AS GlobalCurrentID;
-```
+> ℹ️ **PostgreSQL Note**: To move a table between schemas, SQL Server uses `ALTER SCHEMA target_schema TRANSFER source_schema.table`, while PostgreSQL uses `ALTER TABLE source_schema.table SET SCHEMA target_schema`.
 
 ---
 
-## 3. Standard DDL Commands: CREATE, ALTER, DROP
+## 2. Table DDL: CREATE, ALTER, DROP
 
-### CREATE
+### A. Creating Tables (`CREATE TABLE`)
+
+#### SQL Server (T-SQL)
 ```sql
 CREATE TABLE dbo.Department (
-    DepartmentID INT PRIMARY KEY,
-    DepartmentName VARCHAR(50) NOT NULL
+    DepartmentID INT IDENTITY(1,1) PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE()
 );
-
-CREATE VIEW dbo.v_ActiveDepartments AS
-SELECT DepartmentID, DepartmentName
-FROM dbo.Department;
 ```
 
-### ALTER
+#### PostgreSQL
 ```sql
--- Add column
-ALTER TABLE dbo.Department
-ADD Budget DECIMAL(18, 2);
-
--- Modify column definition
-ALTER TABLE dbo.Department
-ALTER COLUMN DepartmentName VARCHAR(100) NOT NULL;
-```
-
-### DROP
-```sql
-DROP VIEW dbo.v_ActiveDepartments;
-DROP TABLE dbo.Department;
+CREATE TABLE public.Department (
+    DepartmentID INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    DepartmentName VARCHAR(100) NOT NULL,
+    CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 ```
 
 ---
 
-## 4. Key Takeaways
+### B. Altering Columns (`ALTER TABLE ... ALTER COLUMN`)
 
-- **Schemas**: Logical boundaries (`schema.object`) for organizing tables and securing access via GRANT/REVOKE.
-- **IDENTITY**: `IDENTITY(seed, increment)` auto-generates numeric keys.
-- **IDENTITY_INSERT**: Temporarily allows explicit key insertion when set to `ON`.
-- **DBCC CHECKIDENT**: Inspects or resets (`RESEED`) the auto-increment seed counter.
-- **SCOPE_IDENTITY()**: The safest function for capturing newly generated primary key IDs in application code.
+Modifying an existing column's data type or nullability requirement:
+
+#### SQL Server (T-SQL)
+```sql
+-- Add new column
+ALTER TABLE dbo.Department ADD Budget DECIMAL(18,2);
+
+-- Modify column definition in SQL Server
+ALTER TABLE dbo.Department 
+ALTER COLUMN DepartmentName VARCHAR(150) NOT NULL;
+```
+
+#### PostgreSQL
+```sql
+-- Add new column
+ALTER TABLE Department ADD COLUMN Budget DECIMAL(18,2);
+
+-- Modify column data type in PostgreSQL
+ALTER TABLE Department 
+ALTER COLUMN DepartmentName TYPE VARCHAR(150);
+
+-- Modify nullability in PostgreSQL
+ALTER TABLE Department 
+ALTER COLUMN DepartmentName SET NOT NULL;
+```
+> ℹ️ **PostgreSQL Note**: SQL Server modifies type and nullability in a single `ALTER COLUMN col TYPE_DEF` clause. PostgreSQL requires separate `ALTER COLUMN col TYPE new_type` and `ALTER COLUMN col SET NOT NULL` statements.
+
+---
+
+### C. Dropping Objects (`DROP TABLE / DROP VIEW`)
+
+#### SQL Server (T-SQL)
+```sql
+-- SQL Server 2016+ Conditional Drop
+DROP TABLE IF EXISTS dbo.Department;
+```
+
+#### PostgreSQL
+```sql
+-- PostgreSQL Conditional Drop
+DROP TABLE IF EXISTS Department CASCADE;
+```
+> ℹ️ **PostgreSQL Note**: PostgreSQL supports `CASCADE` on `DROP TABLE` to automatically drop dependent foreign key constraints. In SQL Server, dependent constraints must be dropped explicitly first before dropping the parent table.
+
+---
+
+## 3. DDL Feature Comparison Matrix
+
+| DDL Operation | SQL Server (T-SQL) | PostgreSQL |
+| :--- | :--- | :--- |
+| **Auto-Increment ID** | `IDENTITY(seed, incr)` | `GENERATED ALWAYS AS IDENTITY` |
+| **Current Date Default** | `DEFAULT GETDATE()` | `DEFAULT CURRENT_TIMESTAMP` |
+| **Move Table Schema** | `ALTER SCHEMA s TRANSFER tbl` | `ALTER TABLE tbl SET SCHEMA s` |
+| **Alter Column Type** | `ALTER COLUMN col TYPE_DEF` | `ALTER COLUMN col TYPE new_type` |
+| **Set Column NOT NULL** | `ALTER COLUMN col TYPE NOT NULL` | `ALTER COLUMN col SET NOT NULL` |
+| **Drop Table Cascade** | Explicit FK removal required | `DROP TABLE tbl CASCADE` |
 
 ---
 
 > 🔗 **See also**
 > - [../04_INSERT_UPDATE_DELETE_MERGE/theory.md](../04_INSERT_UPDATE_DELETE_MERGE/theory.md)
 > - [../../04_Constraints_and_Integrity/PK_FK_Unique_Check_Default/theory.md](../../04_Constraints_and_Integrity/PK_FK_Unique_Check_Default/theory.md)
-> - [../../12_SSMS_Admin_and_Setup/theory.md](../../12_SSMS_Admin_and_Setup/theory.md)
