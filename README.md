@@ -1,4 +1,4 @@
-# SQL Server Complete Guide
+# Relational Database Fundmentals
 
 This repository is the main learning path for SQL Server, relational database design, SQL querying, and database administration.
 
