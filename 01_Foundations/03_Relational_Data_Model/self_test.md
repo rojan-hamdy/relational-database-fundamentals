@@ -1,7 +1,5 @@
 # Self-Test — The Relational Data Model
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is a relation in the relational model?**
 
 <details>
