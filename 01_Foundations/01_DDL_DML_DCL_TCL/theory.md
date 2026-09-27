@@ -24,10 +24,10 @@ These groups work together like a database lifecycle:
 
 | Category | Main purpose | Typical commands | Example use |
 |---|---|---|---|
-| DDL | Define or change database objects | CREATE, ALTER, DROP | Create a table or modify a column |
+| DDL | Define or change database objects | CREATE, ALTER, DROP, TRUNCATE | Create a table or modify a column |
 | DML | Manage data inside objects | INSERT, UPDATE, DELETE, SELECT, MERGE | Add a new customer or update an order |
-| DCL | Control access and permissions | GRANT, REVOKE, DENY | Allow a user to read a table |
-| TCL | Manage transactions | COMMIT, ROLLBACK, SAVE TRANSACTION | Ensure a purchase is either fully saved or fully undone |
+| DCL | Control access and permissions | GRANT, REVOKE | Allow a user to read a table |
+| TCL | Manage transactions | BEGIN, COMMIT, ROLLBACK, SAVEPOINT | Ensure a purchase is either fully saved or fully undone |
 
 ---
 
@@ -46,17 +46,17 @@ DDL answers the question:
 
 ### Common DDL Commands
 ```sql
-CREATE TABLE Students (
-    StudentID INT PRIMARY KEY,
-    FirstName VARCHAR(50),
-    LastName VARCHAR(50),
-    Age INT
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    age INT
 );
 
-ALTER TABLE Students
-ADD Email VARCHAR(100);
+ALTER TABLE students
+ADD COLUMN email VARCHAR(100);
 
-DROP TABLE Students;
+DROP TABLE students;
 ```
 
 ### Why DDL matters
@@ -82,18 +82,18 @@ DML answers the question:
 
 ### Common DML Commands
 ```sql
-INSERT INTO Students (StudentID, FirstName, LastName, Age)
+INSERT INTO students (student_id, first_name, last_name, age)
 VALUES (1, 'Alice', 'Johnson', 20);
 
-UPDATE Students
-SET Age = 21
-WHERE StudentID = 1;
+UPDATE students
+SET age = 21
+WHERE student_id = 1;
 
-DELETE FROM Students
-WHERE StudentID = 1;
+DELETE FROM students
+WHERE student_id = 1;
 
 SELECT *
-FROM Students;
+FROM students;
 ```
 
 ### DML is data-focused
@@ -118,8 +118,8 @@ DCL answers the question:
 
 ### Common DCL Commands
 ```sql
-GRANT SELECT, INSERT ON Students TO AppUser;
-REVOKE INSERT ON Students FROM AppUser;
+GRANT SELECT, INSERT ON students TO app_user;
+REVOKE INSERT ON students FROM app_user;
 ```
 
 ### Typical DCL tasks
@@ -146,15 +146,15 @@ TCL answers the question:
 
 ### Common TCL Commands
 ```sql
-BEGIN TRANSACTION;
+BEGIN; -- or START TRANSACTION;
 
-UPDATE Accounts
-SET Balance = Balance - 100
-WHERE AccountID = 1;
+UPDATE accounts
+SET balance = balance - 100
+WHERE account_id = 1;
 
-UPDATE Accounts
-SET Balance = Balance + 100
-WHERE AccountID = 2;
+UPDATE accounts
+SET balance = balance + 100
+WHERE account_id = 2;
 
 COMMIT;
 ```
@@ -162,15 +162,15 @@ COMMIT;
 If something goes wrong:
 
 ```sql
-BEGIN TRANSACTION;
+BEGIN;
 
-UPDATE Accounts
-SET Balance = Balance - 100
-WHERE AccountID = 1;
+UPDATE accounts
+SET balance = balance - 100
+WHERE account_id = 1;
 
-UPDATE Accounts
-SET Balance = Balance + 100
-WHERE AccountID = 2;
+UPDATE accounts
+SET balance = balance + 100
+WHERE account_id = 2;
 
 ROLLBACK;
 ```
@@ -178,7 +178,7 @@ ROLLBACK;
 ### Important TCL concepts
 - COMMIT: Save the transaction permanently.
 - ROLLBACK: Undo the transaction.
-- SAVE TRANSACTION: Save a checkpoint within a transaction.
+- SAVE TRANSACTION: Save a checkpoint within a transaction to which you can later roll back (ROLLBACK TO savepoint_name).
 
 > 💡 **Why this matters**
 > Transactions protect data integrity. In banking, payroll, inventory, or order systems, you do not want partial updates.
@@ -202,15 +202,17 @@ TCL ensures the work is committed or rolled back safely
 Example workflow:
 
 ```sql
-CREATE TABLE Orders (
-    OrderID INT PRIMARY KEY,
-    CustomerID INT,
-    TotalAmount DECIMAL(10,2)
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    total_amount NUMERIC(10,2)
 );
 
-GRANT SELECT, INSERT ON Orders TO SalesUser;
+GRANT SELECT, INSERT ON orders TO sales_user;
 
-INSERT INTO Orders (OrderID, CustomerID, TotalAmount)
+BEGIN;
+
+INSERT INTO orders (order_id, customer_id, total_amount)
 VALUES (1, 101, 500.00);
 
 COMMIT;
@@ -218,85 +220,83 @@ COMMIT;
 
 ---
 
-## 7. SSMS: Wizard/GUI View
+## 7. pgAdmin 4: Wizard/GUI View
 
-In SQL Server Management Studio (SSMS), you can create and manage these commands through the GUI.
+In pgAdmin 4 (the official administration client for PostgreSQL), you can manage these actions through the interface.
 
-### DDL in SSMS
-1. Open SSMS.
-2. Connect to the SQL Server instance.
-3. Expand the target database.
-4. Right-click on Tables.
-5. Select New > Table.
-6. Add columns and data types.
-7. Save the table.
+### DDL in pgAdmin
+1. Open pgAdmin 4 and connect to your server.
+2. Expand the target database.
+3. Expand Schemas > public (or your target schema).
+4. Right-click Tables and select Create > Table...
+5. Enter the table name, navigate to the Columns tab to add columns and data types, then click Save.
 
-This creates the table using DDL behind the scenes.
+This generates and executes the CREATE TABLE DDL query behind the scenes.
 
-### DML in SSMS
-1. Open a table in Object Explorer.
+### DML in pgAdmin
+1. Expand Schemas > public > Tables.
 2. Right-click the table.
-3. Choose Edit Top 200 Rows or Select Top 1000 Rows.
-4. Insert, update, or delete rows from the grid.
+3. Choose View/Edit Data > All Rows (or First 100 Rows).
+4. Insert, edit, or delete rows directly within the Data Grid.
+5. Click the Save Data Changes button (or press F6).
 
 This is the GUI equivalent of `INSERT`, `UPDATE`, and `DELETE`.
 
-### DCL in SSMS
-1. Expand Security.
-2. Expand Logins or Users.
-3. Set permissions on database objects or user roles.
-4. Use the properties dialog to assign permissions.
-
+### DCL in pgAdmin
+1. Expand Login/Group Roles under the server tree to view roles.
+2. Right-click any table or database object in the Object Explorer and select Properties.
+3. Navigate to the Privileges tab.
+4. Select a role, assign or uncheck specific privileges (SELECT, INSERT, UPDATE, etc.), and click Save.
 This is the GUI equivalent of `GRANT` and `REVOKE`.
 
-### TCL in SSMS
-TCL is generally done through code rather than a direct wizard. In professional SQL work, transactions are typically written in T-SQL because they require logic and conditional checks.
+### TCL in pgAdmin
+Transactions are handled by writing SQL inside the Query Tool (BEGIN;, COMMIT;, ROLLBACK;) rather than through a dedicated GUI wizard, as transactional workflows rely on application code and execution logic.
 
 ---
 
-## 8. Equivalent T-SQL Examples
+## 8. Equivalent PostgreSQL Examples
 
 ```sql
 -- DDL
-CREATE TABLE Students (
-    StudentID INT PRIMARY KEY,
-    FirstName VARCHAR(50),
-    LastName VARCHAR(50),
-    Age INT
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    age INT
 );
 
-ALTER TABLE Students
-ADD Email VARCHAR(100);
+ALTER TABLE students
+ADD COLUMN email VARCHAR(100);
 
-DROP TABLE Students;
+DROP TABLE students;
 
 -- DML
-INSERT INTO Students (StudentID, FirstName, LastName, Age)
+INSERT INTO students (student_id, first_name, last_name, age)
 VALUES (1, 'Alice', 'Johnson', 20);
 
-UPDATE Students
-SET Age = 21
-WHERE StudentID = 1;
+UPDATE students
+SET age = 21
+WHERE student_id = 1;
 
-DELETE FROM Students
-WHERE StudentID = 1;
+DELETE FROM students
+WHERE student_id = 1;
 
 SELECT *
-FROM Students;
+FROM students;
 
 -- DCL
-GRANT SELECT, INSERT ON Students TO AppUser;
-REVOKE INSERT ON Students FROM AppUser;
+GRANT SELECT, INSERT ON students TO app_user;
+REVOKE INSERT ON students FROM app_user;
 
 -- TCL
-BEGIN TRANSACTION;
+BEGIN;
 
-INSERT INTO Students (StudentID, FirstName, LastName, Age)
+INSERT INTO students (student_id, first_name, last_name, age)
 VALUES (2, 'Bob', 'Smith', 22);
 
-UPDATE Students
-SET Age = 23
-WHERE StudentID = 2;
+UPDATE students
+SET age = 23
+WHERE student_id = 2;
 
 COMMIT;
 ```
