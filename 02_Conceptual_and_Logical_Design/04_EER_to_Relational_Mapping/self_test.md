@@ -1,7 +1,5 @@
 # Self-Test — EER to Relational Mapping
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is the typical relational mapping for a superclass/subclass relationship?**
 
 <details>
