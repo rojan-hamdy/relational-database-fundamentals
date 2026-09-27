@@ -1,14 +1,23 @@
 -- Hands-on practice: The Relational Data Model
 -- Purpose: model entities, keys, and constraints in relational form
+--
+-- Notes on running this script:
+--   - CREATE DATABASE and DROP DATABASE cannot run while you are connected to
+--     relationalmodeldemo itself (PostgreSQL will not let you drop, or create
+--     alongside other statements in, the database you're currently in).
+--   - Run the CREATE DATABASE line while connected to the default 'postgres'
+--     database.
+--   - Then connect to relationalmodeldemo (\c relationalmodeldemo in psql, or
+--     click it in pgAdmin) before running sections 1-6.
+--   - Reconnect back to 'postgres' (\c postgres) before running DROP DATABASE
+--     in section 7.
 
-USE master;
-GO
+-- (run this while connected to the 'postgres' database)
+CREATE DATABASE relationalmodeldemo;
 
-CREATE DATABASE RelationalModelDemo;
-GO
-
-USE RelationalModelDemo;
-GO
+-- Connect to the new database:
+--   in psql:    \c relationalmodeldemo
+--   in pgAdmin: click on the database in the Browser panel
 
 -- 1) Create parent table
 CREATE TABLE Departments (
@@ -16,7 +25,6 @@ CREATE TABLE Departments (
     DepartmentName VARCHAR(100) NOT NULL,
     Location VARCHAR(100) DEFAULT 'Main Campus'
 );
-GO
 
 -- 2) Create child table with a foreign key and constraints
 CREATE TABLE Students (
@@ -30,26 +38,22 @@ CREATE TABLE Students (
         FOREIGN KEY (DepartmentID)
         REFERENCES Departments(DepartmentID)
 );
-GO
 
 -- 3) Insert valid rows
 INSERT INTO Departments (DepartmentID, DepartmentName, Location)
 VALUES
     (1, 'Computer Science', 'Building A'),
     (2, 'Mathematics', 'Building B');
-GO
 
 INSERT INTO Students (StudentID, FirstName, LastName, Age, Email, DepartmentID)
 VALUES
     (101, 'Alice', 'Johnson', 20, 'alice@example.com', 1),
     (102, 'Bob', 'Smith', 22, 'bob@example.com', 2);
-GO
 
 -- 4) Query with a join to see the relationship
 SELECT s.StudentID, s.FirstName, s.LastName, d.DepartmentName
 FROM Students s
 JOIN Departments d ON s.DepartmentID = d.DepartmentID;
-GO
 
 -- 5) Show a constraint violation example (uncomment to test)
 -- INSERT INTO Students (StudentID, FirstName, LastName, Age, Email, DepartmentID)
@@ -63,10 +67,11 @@ GO
 -- 7) Cleanup
 DROP TABLE IF EXISTS Students;
 DROP TABLE IF EXISTS Departments;
-DROP DATABASE IF EXISTS RelationalModelDemo;
-GO
+
+-- Reconnect to 'postgres' first (\c postgres), since you cannot drop the
+-- database you are currently connected to:
+DROP DATABASE IF EXISTS relationalmodeldemo;
 
 -- Reflection:
 -- The relational model organizes data in tables with keys and constraints.
 -- It allows relationships between entities to stay valid and consistent.
-
