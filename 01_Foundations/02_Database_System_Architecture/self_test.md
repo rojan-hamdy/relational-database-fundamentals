@@ -19,28 +19,28 @@ External level, conceptual level, and internal level.
 
 <details>
 <summary>Show answer</summary>
-A schema is the logical structure of the database, including tables, columns, relationships, and constraints.
+A schema is the logical structure of the database, including tables, columns, relationships, and constraints. In PostgreSQL, "schema" also refers to a namespace (such as the default `public` schema) that groups related tables within a database.
 </details>
 
 **Q4. What does the query processor do?**
 
 <details>
 <summary>Show answer</summary>
-It parses SQL, optimizes execution plans, and runs the queries efficiently.
+It parses SQL, optimizes execution plans, and runs the queries efficiently. In PostgreSQL, the planner's chosen execution plan can be inspected with `EXPLAIN`.
 </details>
 
 **Q5. Why is concurrency control important?**
 
 <details>
 <summary>Show answer</summary>
-Because multiple users may access or update the same data at the same time. Concurrency control prevents inconsistent results.
+Because multiple users may access or update the same data at the same time. Concurrency control prevents inconsistent results. PostgreSQL handles this primarily through MVCC (Multi-Version Concurrency Control) rather than heavy locking.
 </details>
 
 **Q6. What is the purpose of the recovery manager?**
 
 <details>
 <summary>Show answer</summary>
-It helps restore the database after a system crash or failure by using logs and recovery procedures.
+It helps restore the database after a system crash or failure by using logs and recovery procedures. PostgreSQL implements this via Write-Ahead Logging (WAL).
 </details>
 
 **Q7. What is the main difference between the conceptual and internal levels?**
@@ -50,11 +50,11 @@ It helps restore the database after a system crash or failure by using logs and 
 The conceptual level describes the logical design of the data, while the internal level describes how it is physically stored and accessed.
 </details>
 
-**Q8. In SQL Server, which tool is commonly used to create databases and tables graphically?**
+**Q8. In PostgreSQL, which tool is commonly used to create databases and tables graphically?**
 
 <details>
 <summary>Show answer</summary>
-SQL Server Management Studio (SSMS).
+pgAdmin.
 </details>
 
 ---
@@ -63,8 +63,7 @@ SQL Server Management Studio (SSMS).
 
 - Database = stored data
 - DBMS = software managing the data
-- Schema = design structure
-- Instance = current data state at a point in time
+- Schema = design structure (and, in PostgreSQL, also a namespace within a database)
+- Instance = current data state at a point in time (and, in PostgreSQL, the running server/cluster)
 - Architecture levels = external, conceptual, internal
 - Core DBMS responsibilities = storage, query processing, transaction control, recovery, security
-
