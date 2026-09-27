@@ -118,36 +118,33 @@ This reduces risk and limits the blast radius of security errors or compromised 
 
 ---
 
-## 8. Authentication in SSMS
+## 8. Authentication and Authorization in pgAdmin
 
-In SSMS, you can manage access through the Security node:
+In pgAdmin, you can manage access through the Browser panel:
 
-1. Open SSMS.
-2. Connect to the SQL Server instance.
-3. Expand Security.
-4. View Logins.
-5. Create or modify login accounts.
-6. Map them to database users as needed.
+1. Open pgAdmin.
+2. Connect to your PostgreSQL server instance.
+3. Expand **Login/Group Roles**.
+4. Right-click **Login/Group Roles > Create > Login/Group Role...** to create login roles.
+5. Expand target **Database > Schemas > Privileges** to grant or revoke object privileges.
 
-This is the GUI equivalent of configuring authentication and database access.
+This is the GUI equivalent of configuring roles, passwords, and permissions.
 
 ---
 
-## 9. Equivalent T-SQL Examples
+## 9. Equivalent PostgreSQL Examples
 
 ```sql
--- Create SQL login and database user
-CREATE LOGIN AppLogin WITH PASSWORD = 'StrongPass123!';
-GO
+-- Create a login role in PostgreSQL
+CREATE ROLE appuser WITH LOGIN PASSWORD 'StrongPass123!';
 
-CREATE USER AppUser FOR LOGIN AppLogin;
-GO
-
--- Give read access to a table
-GRANT SELECT ON dbo.Student TO AppUser;
-GO
+-- Grant schema usage and table SELECT permission
+GRANT USAGE ON SCHEMA public TO appuser;
+GRANT SELECT ON TABLE public.student TO appuser;
 
 -- Remove permission
+REVOKE SELECT ON TABLE public.student FROM appuser;
+```
 REVOKE SELECT ON dbo.Student FROM AppUser;
 GO
 

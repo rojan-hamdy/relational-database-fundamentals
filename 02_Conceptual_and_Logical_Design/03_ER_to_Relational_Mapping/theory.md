@@ -135,19 +135,19 @@ This diagram shows how the conceptual ER design is translated into relational ta
 
 ---
 
-## 7. SSMS and SQL Mapping
+## 7. pgAdmin and SQL Mapping
 
-In SSMS, after creating the conceptual design, the mapping typically becomes:
+In pgAdmin, after creating the conceptual design, the mapping typically becomes:
 
 1. Create parent tables.
-2. Create child tables and add foreign keys.
+2. Create child tables and add foreign keys under the Constraints tab.
 3. Create bridge tables for many-to-many relationships.
 4. Set primary keys and constraints.
 5. Validate referential integrity.
 
 ---
 
-## 8. Equivalent T-SQL Example
+## 8. Equivalent PostgreSQL Example
 
 ```sql
 CREATE TABLE Department (

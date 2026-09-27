@@ -137,19 +137,19 @@ This visual clarifies how superclass and subclass relationships become separate 
 
 ---
 
-## 8. SSMS and SQL Mapping
+## 8. pgAdmin and SQL Mapping
 
-In SSMS, the equivalent implementation is usually:
+In pgAdmin, the equivalent implementation is usually:
 
 1. Create the top-level superclass table.
 2. Create subtype tables.
-3. Add foreign keys referencing the superclass.
+3. Add foreign keys referencing the superclass under the Constraints tab.
 4. Add constraints to enforce subtype rules when needed.
 5. Validate relationships and data integrity.
 
 ---
 
-## 9. Equivalent T-SQL Example
+## 9. Equivalent PostgreSQL Example
 
 ```sql
 CREATE TABLE Person (

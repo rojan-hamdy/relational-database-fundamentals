@@ -295,27 +295,26 @@ Typical ER notations:
 
 ---
 
-## 9. SSMS and SQL Mapping
+## 9. pgAdmin and SQL Mapping
 
-ER modeling is usually done in a design tool or on paper before creating tables. In SSMS, the equivalent step is:
+ER modeling is usually done in a design tool or on paper before creating tables. In pgAdmin, the equivalent step is:
 
-1. Open SSMS.
-2. Connect to the server.
-3. Create a database.
-4. Right-click Tables > New > Table.
-5. Add columns and assign primary keys.
-6. Add foreign keys to represent relationships.
+1. Open pgAdmin.
+2. Connect to your PostgreSQL server.
+3. Create a database (`CREATE DATABASE`).
+4. Expand Schemas > public > Tables, then right-click Tables > Create > Table...
+5. Add columns, set data types, and assign primary keys under the Columns tab.
+6. Add foreign keys under the Constraints tab to represent relationships.
 
 ---
 
-## 10. Equivalent T-SQL Example
+## 10. Equivalent PostgreSQL Example
 
 ```sql
-CREATE DATABASE UniversityDB;
-GO
+CREATE DATABASE universitydb;
 
-USE UniversityDB;
-GO
+-- Connect to universitydb
+\c universitydb
 
 CREATE TABLE Department (
     DepartmentID INT PRIMARY KEY,

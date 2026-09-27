@@ -178,9 +178,9 @@ Functional dependencies are central to determining candidate keys and understand
 
 ---
 
-## 10. SSMS and T-SQL Mapping
+## 10. pgAdmin and SQL Mapping
 
-In SSMS, normalization is not a wizard-driven task as such. Instead, it is a design process:
+In pgAdmin, normalization is not a wizard-driven task as such. Instead, it is a design process:
 
 1. Identify entities and attributes.
 2. Discover dependencies.
@@ -188,11 +188,11 @@ In SSMS, normalization is not a wizard-driven task as such. Instead, it is a des
 4. Split repeating or dependent data into separate tables.
 5. Check constraints and referential integrity.
 
-The equivalent SQL implementation is usually done by creating tables with sensible keys and foreign keys.
+The equivalent SQL implementation is done by creating tables with sensible primary keys and foreign keys.
 
 ---
 
-## 11. Equivalent T-SQL Example
+## 11. Equivalent PostgreSQL Example
 
 ```sql
 CREATE TABLE Department (

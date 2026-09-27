@@ -1,4 +1,10 @@
 -- Hands-on Practice: PostgreSQL Syntax for INSERT, UPDATE, DELETE, TRUNCATE, MERGE & CREATE TABLE AS SELECT
+-- Purpose: master DML data modification techniques in PostgreSQL
+
+DROP TABLE IF EXISTS ProductBackup;
+DROP TABLE IF EXISTS CheapProducts;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS ProductStage;
 
 -- 1. Setup Staging and Target Tables
 CREATE TABLE ProductStage (
@@ -32,7 +38,6 @@ FROM ProductStage
 WHERE UnitPrice < 50.00;
 
 -- 3. Practice CREATE TABLE AS SELECT (PostgreSQL equivalent of T-SQL SELECT INTO)
--- Create permanent table on the fly
 CREATE TABLE ProductBackup AS
 SELECT ProductID, ProductName, UnitPrice
 FROM ProductStage;
@@ -44,15 +49,15 @@ FROM ProductStage
 WHERE UnitPrice > 1000.00;
 
 -- 4. Practice TRUNCATE TABLE Rollback Demo
-BEGIN TRANSACTION;
+BEGIN;
     -- Truncate staging table
     TRUNCATE TABLE ProductStage;
     
     -- Verify table is empty
     SELECT COUNT(*) AS RowsAfterTruncate FROM ProductStage; -- 0
     
--- Rollback transaction to restore data
-ROLLBACK TRANSACTION;
+-- Rollback transaction to restore data (MVCC transactional TRUNCATE support)
+ROLLBACK;
 
 -- Verify data is restored!
 SELECT COUNT(*) AS RowsAfterRollback FROM ProductStage; -- 3

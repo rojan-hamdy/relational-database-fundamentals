@@ -10,7 +10,7 @@ Security is not only about login controls. Data also needs to be protected while
 - database encryption where supported,
 - secure storage for logs and files.
 
-### SSMS method
+### pgAdmin method
 - Review backup storage locations.
 - Check whether backups are encrypted.
 - Verify database encryption options in supported editions.

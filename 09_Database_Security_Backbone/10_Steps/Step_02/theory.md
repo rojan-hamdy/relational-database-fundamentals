@@ -29,7 +29,7 @@ GRANT SELECT ON SCHEMA::dbo TO App_ReadOnly;
 GO
 ```
 
-### SSMS method
+### pgAdmin method
 1. Open the target database.
 2. Expand Security.
 3. Expand Roles.

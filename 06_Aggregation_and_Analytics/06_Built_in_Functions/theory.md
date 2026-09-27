@@ -217,26 +217,25 @@ WHERE type IN ('FN', 'IF', 'TF')
 
 ```sql
 -- Get the parameter list and return type of a specific function
-SELECT p.name AS ParameterName, t.name AS DataType, p.is_output
-FROM sys.parameters p
-JOIN sys.types t ON p.system_type_id = t.system_type_id
-WHERE p.object_id = OBJECT_ID('dbo.MyFunction');
+SELECT p.parameter_name, p.data_type
+FROM information_schema.parameters p
+WHERE p.specific_name LIKE 'myfunction%';
 ```
 
-Note: `sys.objects` mainly surfaces **user-defined** functions well; SQL Server's *built-in* functions (like `GETDATE`, `ROUND`, `COALESCE`) are part of the engine itself and won't all appear there — for those, the official docs (below) are the reliable source.
+Note: System functions in PostgreSQL (like `NOW()`, `ROUND()`, `COALESCE()`) live in the `pg_catalog` schema and `information_schema`.
 
-### b) Use SSMS / Azure Data Studio IntelliSense
+### b) Use pgAdmin & psql Help
 
-- Start typing a function name and pause — IntelliSense shows a tooltip with its parameter list and a short description.
-- Highlight a function name and press **Shift+F1** (SSMS) to jump straight to its documentation page in the browser.
-- The **Object Explorer** → `Programmability` → `Functions` → `System Functions` node lists every built-in function grouped by category (String, Date and Time, Mathematical, System, etc.) for the connected SQL Server version.
+- In `psql`, type `\df function_name` to view overloaded function signatures and return types.
+- In pgAdmin Query Tool, autocomplete displays function parameter tooltips.
+- The **pgAdmin Object Explorer** → `Databases` → `Schemas` → `pg_catalog` → `Functions` node lists system functions.
 
-### c) Check the official Microsoft documentation
+### c) Check the official PostgreSQL documentation
 
-The most complete and version-accurate reference is Microsoft Learn's **Built-in Functions (Transact-SQL)** page, organized by the same categories used in this document (String, Date and Time, Mathematical, Logical, System, Conversion, and more). It lists every function's exact syntax, arguments, return type, and compatibility notes per SQL Server version:
-`https://learn.microsoft.com/en-us/sql/t-sql/functions/functions`
+The most complete reference is PostgreSQL Docs (**Functions and Operators**), organized by category (String, Date/Time, Mathematical, JSON, Window, and Aggregate functions):
+`https://www.postgresql.org/docs/current/functions.html`
 
-When in doubt about a function's exact behavior (especially edge cases like `NULL` handling, rounding direction, or locale-dependent formatting), check this page rather than assuming — behavior sometimes differs subtly between SQL Server versions or between SQL Server and other database engines (MySQL, PostgreSQL, Oracle).
+When in doubt about a function's exact behavior (especially edge cases like `NULL` handling, rounding direction, or timezone sensitivity), check the PostgreSQL documentation.
 
 ### d) Quick sanity-check pattern
 

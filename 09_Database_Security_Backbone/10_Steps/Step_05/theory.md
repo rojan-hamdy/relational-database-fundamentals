@@ -17,7 +17,7 @@ DENY INSERT ON dbo.Payroll TO FinanceUser;
 GO
 ```
 
-### SSMS method
+### pgAdmin method
 1. Open database object properties.
 2. Set permissions for tables, views, and procedures.
 3. Restrict access to admin-only objects.

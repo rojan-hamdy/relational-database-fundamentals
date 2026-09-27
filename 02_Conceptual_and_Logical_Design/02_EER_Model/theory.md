@@ -275,18 +275,18 @@ This image is stored beside the lesson and helps visualize specialization, gener
 
 ---
 
-## 10. SSMS and SQL Mapping
+## 10. pgAdmin and SQL Mapping
 
-EER concepts are usually designed before implementation. In SSMS, the equivalent implementation often looks like:
+EER concepts are usually designed before implementation. In pgAdmin, the equivalent implementation often looks like:
 
-1. Create a general table, like `Person`
+1. Create a general parent table, like `Person`
 2. Add subtype tables like `Employee`, `Customer`, `Student`
-3. Add foreign keys from subtype tables back to the parent table
+3. Add primary and foreign keys from subtype tables back to the parent table
 4. Define constraints to enforce specialization rules
 
 ---
 
-## 11. Equivalent T-SQL Example
+## 11. Equivalent PostgreSQL Example
 
 ```sql
 CREATE TABLE Person (
@@ -297,7 +297,7 @@ CREATE TABLE Person (
 
 CREATE TABLE Employee (
     PersonID INT PRIMARY KEY,
-    Salary DECIMAL(10,2),
+    Salary NUMERIC(10,2),
     HireDate DATE,
     CONSTRAINT FK_Employee_Person
         FOREIGN KEY (PersonID)

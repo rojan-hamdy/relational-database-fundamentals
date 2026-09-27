@@ -34,8 +34,8 @@ WHERE type IN ('U', 'V', 'P');
 ```
 This helps administrators identify the core database objects that require protection.
 
-### SSMS method
-1. Open SSMS.
+### pgAdmin method
+1. Open pgAdmin.
 2. Connect to the server.
 3. Expand Databases.
 4. Inspect tables, views, and stored procedures.

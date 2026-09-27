@@ -15,7 +15,7 @@ CREATE LOGIN DemoLogin WITH PASSWORD = 'StrongP@ssw0rd!';
 GO
 ```
 
-### SSMS method
+### pgAdmin method
 1. Connect to the SQL Server instance as an admin.
 2. Expand Security.
 3. Right-click Logins.

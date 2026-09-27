@@ -140,24 +140,24 @@ You can also represent the three levels as a Mermaid diagram or a simple archite
 
 ---
 
-## 8. SSMS and SQL Mapping
+## 8. pgAdmin and SQL Mapping
 
-In SSMS, the visible implementation steps can be:
+In pgAdmin, the visible implementation steps can be:
 
-1. Create the database
-2. Define tables and keys
+1. Create the database (`CREATE DATABASE`)
+2. Define tables, data types, and primary keys
 3. Add constraints and relationships
-4. Create indexes for performance
-5. Review storage and file settings
+4. Create indexes for performance tuning
+5. Review tablespace and storage settings
 
 This reflects the progression from logical design to physical tuning.
 
 ---
 
-## 9. Equivalent T-SQL Example
+## 9. Equivalent PostgreSQL Example
 
 ```sql
-CREATE DATABASE UniversityDB;
+CREATE DATABASE universitydb;
 GO
 
 USE UniversityDB;

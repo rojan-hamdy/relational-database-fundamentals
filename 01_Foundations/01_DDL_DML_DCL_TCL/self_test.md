@@ -15,18 +15,18 @@ DDL stands for Data Definition Language. It defines or changes the structure of 
 DML, or Data Manipulation Language. It uses commands such as INSERT, UPDATE, DELETE, and SELECT.
 </details>
 
-**Q3. What is the purpose of DCL in SQL Server?**
+**Q3. What is the purpose of DCL in PostgreSQL?**
 
 <details>
 <summary>Show answer</summary>
-DCL controls permissions and access. It uses GRANT, REVOKE, and similar commands to allow or restrict user access to database objects.
+DCL controls permissions and access. It uses GRANT, REVOKE, and similar commands to allow or restrict user/role access to database objects.
 </details>
 
 **Q4. What does TCL manage, and which commands belong to it?**
 
 <details>
 <summary>Show answer</summary>
-TCL manages transactions, ensuring that related changes are saved or undone as a single unit. Common commands are BEGIN TRANSACTION, COMMIT, ROLLBACK, and SAVE TRANSACTION.
+TCL manages transactions, ensuring that related changes are saved or undone as a single unit. Common commands in PostgreSQL are BEGIN, COMMIT, ROLLBACK, and SAVEPOINT.
 </details>
 
 **Q5. Which would you use to create a new table: DDL, DML, DCL, or TCL?**

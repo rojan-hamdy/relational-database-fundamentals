@@ -22,7 +22,7 @@ SELECT *
 FROM sys.database_permissions;
 ```
 
-### SSMS method
+### pgAdmin method
 1. Open SQL Server logs.
 2. Review failed login events.
 3. Check activity on critical objects.

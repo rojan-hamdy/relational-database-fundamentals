@@ -19,7 +19,7 @@ DENY DELETE ON dbo.Customer TO DemoUser;
 GO
 ```
 
-### SSMS method
+### pgAdmin method
 1. Expand Database → Security → Users.
 2. Select the user.
 3. Review permissions.
