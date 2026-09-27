@@ -50,8 +50,10 @@ A foreign key is an attribute in one table that references the primary key in an
 
 Example:
 ```sql
-DepartmentID INT FOREIGN KEY REFERENCES Departments(DepartmentID)
+DepartmentID INT REFERENCES Departments(DepartmentID)
 ```
+
+> Note: unlike T-SQL, PostgreSQL does not use the `FOREIGN KEY` keyword for an inline column-level reference — `REFERENCES` alone is enough. `FOREIGN KEY (...) REFERENCES ...` is only used for the table-level (named or composite) form, as shown in section 2.4 and section 10.
 
 ### 2.4 Composite Key
 A composite key is a key made of multiple columns together.
@@ -188,24 +190,24 @@ These ideas map directly to SQL operations.
 
 ---
 
-## 9. SSMS: Wizard/GUI View
+## 9. pgAdmin: Wizard/GUI View
 
-### Create a table with constraints in SSMS
-1. Open SSMS.
-2. Connect to a database.
-3. Expand the database.
-4. Right-click Tables.
-5. Choose New > Table.
-6. Enter column names and data types.
-7. Set the primary key.
-8. Add foreign keys and check constraints.
-9. Save the table.
+### Create a table with constraints in pgAdmin
+1. Open pgAdmin.
+2. Connect to a server.
+3. Expand the database, then expand **Schemas > public** (or the relevant schema).
+4. Right-click **Tables**.
+5. Choose **Create > Table...**.
+6. On the **Columns** tab, enter column names and data types.
+7. On the **Constraints** tab, set the primary key.
+8. On the **Constraints** tab, add foreign keys and check constraints.
+9. Click **Save**.
 
 This GUI action generates the relational definition behind the scenes.
 
 ---
 
-## 10. Equivalent T-SQL Examples
+## 10. Equivalent PostgreSQL Examples
 
 ```sql
 CREATE TABLE Departments (
@@ -259,4 +261,3 @@ JOIN Departments d ON s.DepartmentID = d.DepartmentID;
 > 🔗 **See also**
 > - [../02_Database_System_Architecture/theory.md](../02_Database_System_Architecture/theory.md)
 > - [../../04_Constraints_and_Integrity/PK_FK_Unique_Check_Default/theory.md](../../04_Constraints_and_Integrity/PK_FK_Unique_Check_Default/theory.md)
-
