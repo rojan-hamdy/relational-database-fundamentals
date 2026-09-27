@@ -1,7 +1,5 @@
 # Self-Test — EER Model
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is the difference between ER and EER models?**
 
 <details>
