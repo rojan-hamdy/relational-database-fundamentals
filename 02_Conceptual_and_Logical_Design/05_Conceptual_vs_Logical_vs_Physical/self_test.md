@@ -1,7 +1,5 @@
 # Self-Test — Conceptual vs Logical vs Physical Design
 
-> Status: ✅ Ready for practice.
-
 **Q1. What is conceptual design focused on?**
 
 <details>
