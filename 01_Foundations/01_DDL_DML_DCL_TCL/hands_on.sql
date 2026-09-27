@@ -1,110 +1,87 @@
--- Hands-on practice: DDL, DML, DCL, TCL
+-- Hands-on practice: DDL, DML, DCL, TCL (PostgreSQL)
 -- Purpose: understand how schema, data, permissions, and transactions work together
 
-USE master;
-GO
-
 -- 1) DDL: create a table and modify its structure
-CREATE DATABASE DemoDB;
-GO
+CREATE DATABASE demodb;
 
-USE DemoDB;
-GO
+-- In psql client, switch to the new database:
+-- \c demodb
 
-CREATE TABLE Students (
-    StudentID INT PRIMARY KEY,
-    FirstName VARCHAR(50) NOT NULL,
-    LastName VARCHAR(50) NOT NULL,
-    Age INT,
-    Email VARCHAR(100)
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    age INT,
+    email VARCHAR(100)
 );
-GO
 
-ALTER TABLE Students
-ADD DateOfBirth DATE;
-GO
+ALTER TABLE students
+ADD COLUMN date_of_birth DATE;
 
 -- 2) DML: insert, read, update, and delete data
-INSERT INTO Students (StudentID, FirstName, LastName, Age, Email, DateOfBirth)
+INSERT INTO students (student_id, first_name, last_name, age, email, date_of_birth)
 VALUES
     (1, 'Alice', 'Johnson', 20, 'alice@example.com', '2005-01-15'),
     (2, 'Bob', 'Smith', 22, 'bob@example.com', '2003-03-10');
-GO
 
 SELECT *
-FROM Students;
-GO
+FROM students;
 
-UPDATE Students
-SET Age = 21
-WHERE StudentID = 1;
-GO
+UPDATE students
+SET age = 21
+WHERE student_id = 1;
 
-DELETE FROM Students
-WHERE StudentID = 2;
-GO
+DELETE FROM students
+WHERE student_id = 2;
 
 -- 3) DCL: grant and revoke permissions
-CREATE LOGIN DemoUser WITH PASSWORD = 'StrongPass123!';
-GO
+-- PostgreSQL unifies logins and users into roles
+CREATE USER demo_user WITH PASSWORD 'StrongPass123!';
 
-CREATE USER DemoUser FOR LOGIN DemoUser;
-GO
+GRANT SELECT, INSERT ON students TO demo_user;
 
-GRANT SELECT, INSERT ON Students TO DemoUser;
-GO
-
-REVOKE INSERT ON Students FROM DemoUser;
-GO
+REVOKE INSERT ON students FROM demo_user;
 
 -- 4) TCL: transaction management
-BEGIN TRANSACTION;
+BEGIN;
 
-INSERT INTO Students (StudentID, FirstName, LastName, Age, Email)
+INSERT INTO students (student_id, first_name, last_name, age, email)
 VALUES (3, 'Charlie', 'Brown', 23, 'charlie@example.com');
 
-UPDATE Students
-SET Age = 24
-WHERE StudentID = 3;
+UPDATE students
+SET age = 24
+WHERE student_id = 3;
 
 -- Decide whether to save or undo
 COMMIT;
 -- ROLLBACK;
-GO
 
--- Optional: savepoint example
-BEGIN TRANSACTION;
+-- Savepoint example
+BEGIN;
 
-INSERT INTO Students (StudentID, FirstName, LastName, Age, Email)
+INSERT INTO students (student_id, first_name, last_name, age, email)
 VALUES (4, 'Dana', 'White', 19, 'dana@example.com');
 
-SAVE TRANSACTION BeforeCleanup;
+SAVEPOINT before_cleanup;
 
-DELETE FROM Students
-WHERE StudentID = 4;
+DELETE FROM students
+WHERE student_id = 4;
 
--- To undo only the delete, use ROLLBACK TRANSACTION BeforeCleanup
--- ROLLBACK TRANSACTION BeforeCleanup;
+-- To undo only the delete:
+-- ROLLBACK TO SAVEPOINT before_cleanup;
 
 COMMIT;
-GO
 
 -- 5) Cleanup for the demo
-DROP TABLE IF EXISTS Students;
-GO
+DROP TABLE IF EXISTS students;
 
-DROP USER IF EXISTS DemoUser;
-GO
+DROP USER IF EXISTS demo_user;
 
-DROP LOGIN IF EXISTS DemoUser;
-GO
-
-DROP DATABASE IF EXISTS DemoDB;
-GO
+-- Note: To drop the database, disconnect from demodb first (e.g., \c postgres)
+-- DROP DATABASE IF EXISTS demodb;
 
 -- Additional reflection:
 -- DDL changes the structure of the database.
 -- DML changes the data stored in the structure.
 -- DCL controls access to the structure and the data.
 -- TCL ensures a group of changes is committed or rolled back consistently.
-
