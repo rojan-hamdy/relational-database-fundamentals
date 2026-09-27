@@ -23,13 +23,13 @@ The goal of database architecture is to separate concerns so that users work wit
 > A software system that allows users to create, retrieve, update, and manage data efficiently and securely.
 
 > 💡 **Schema**
-> The structure of the database: tables, columns, constraints, relationships, and rules.
+> The structure of the database: tables, columns, constraints, relationships, and rules. In PostgreSQL, "schema" also refers to a namespace inside a database (e.g. the default `public` schema) that groups related tables.
 
 > 💡 **Instance**
-> A specific state or snapshot of the database at a given moment, including the currently stored data.
+> A specific state or snapshot of the database at a given moment, including the currently stored data. In PostgreSQL, "instance" (or "cluster") more precisely refers to a single running `postgres` server process managing one or more databases.
 
 > 💡 **Metadata**
-> Data about the data: column names, data types, constraints, table definitions, and relationship rules.
+> Data about the data: column names, data types, constraints, table definitions, and relationship rules. In PostgreSQL this lives in the `information_schema` and the `pg_catalog` system catalogs.
 
 ---
 
@@ -58,7 +58,7 @@ This is how each user or application views the data.
 
 - A user may only see selected tables or columns.
 - Different users may see different views of the same database.
-- This is often implemented through views.
+- This is often implemented through views (`CREATE VIEW`).
 
 ### 3.2 Conceptual Level
 This is the logical representation of the whole database.
@@ -70,7 +70,7 @@ This is the logical representation of the whole database.
 This is the storage view.
 
 - Defines how data is stored on disk.
-- Includes files, indexes, record organization, pages, and access paths.
+- Includes files, indexes, record organization, pages (PostgreSQL uses 8 KB pages by default), and access paths.
 - This is handled by the DBMS and is not typically visible to end users.
 
 > 🔗 **Important idea**
@@ -87,7 +87,7 @@ Responsible for interpreting SQL statements and planning how to execute them.
 
 It includes:
 - parser,
-- optimizer,
+- planner/optimizer (in PostgreSQL, the query planner, inspectable via `EXPLAIN`),
 - execution engine.
 
 ### 4.2 Storage Manager
@@ -96,32 +96,32 @@ Responsible for actual data handling.
 It manages:
 - files,
 - pages,
-- tables,
+- tables (including PostgreSQL's heap storage and TOAST for large values),
 - indexes,
-- buffers,
+- buffers (the shared buffer cache),
 - transactions.
 
 ### 4.3 Transaction Manager
-Controls transactions so that operations are atomic, consistent, isolated, and durable.
+Controls transactions so that operations are atomic, consistent, isolated, and durable (ACID). PostgreSQL implements this using MVCC (Multi-Version Concurrency Control).
 
 ### 4.4 Recovery Manager
-Ensures the database can be restored after crashes or failures.
+Ensures the database can be restored after crashes or failures. PostgreSQL uses Write-Ahead Logging (WAL) for crash recovery.
 
 ### 4.5 Concurrency Control Manager
-Coordinates simultaneous access by multiple users to prevent inconsistent or invalid results.
+Coordinates simultaneous access by multiple users to prevent inconsistent or invalid results, primarily via PostgreSQL's MVCC model rather than heavy locking.
 
 ### 4.6 Authorization and Security Manager
-Checks whether a user has permission to access or modify data.
+Checks whether a user (role) has permission to access or modify data, via PostgreSQL roles and privileges (`GRANT`/`REVOKE`).
 
 ---
 
 ## 5. Client-Server Database Model
 
-Most SQL Server systems use a client-server architecture.
+Most PostgreSQL systems use a client-server architecture.
 
-- Client: application or SSMS interface
-- Server: SQL Server engine
-- Database files: stored on the server
+- Client: application, `psql`, or pgAdmin interface
+- Server: PostgreSQL server process (`postgres`)
+- Database files: stored on the server (the data directory)
 - Queries are sent from client to server
 - Server executes the request and returns results
 
@@ -139,97 +139,98 @@ A complete database system usually includes the following:
 - transaction processing,
 - metadata management,
 - authorization and auditing,
-- backup and restore mechanisms,
+- backup and restore mechanisms (`pg_dump` / `pg_restore`),
 - performance tuning and indexing.
 
 ---
 
-## 7. Database System and SQL Server Context
+## 7. Database System and PostgreSQL Context
 
-In SQL Server, a database is typically created inside an instance.
+In PostgreSQL, a database is created inside a server instance (cluster).
 
-A database instance includes:
+A database instance (cluster) includes:
 
-- server configuration,
+- server configuration (`postgresql.conf`, `pg_hba.conf`),
 - databases,
-- logins and users,
+- roles (used for both logins and users),
 - security settings,
 - services and connectivity.
 
-In SSMS, you usually work with:
+In pgAdmin, you usually work with:
 
-- Server instance
+- Server
 - Databases
+- Schemas
 - Tables
 - Views
-- Security
-- Jobs
+- Login/Group Roles
+- Tablespaces
+- Scheduled/maintenance jobs (via pgAgent, if installed)
 - Backups
 
 ---
 
-## 8. SSMS: Wizard/GUI Steps
+## 8. pgAdmin: Wizard/GUI Steps
 
-### Create a new database in SSMS
-1. Open SQL Server Management Studio.
-2. Connect to your SQL Server instance.
-3. In Object Explorer, right-click on Databases.
-4. Select New Database.
+### Create a new database in pgAdmin
+1. Open pgAdmin.
+2. Connect to your PostgreSQL server.
+3. In the Object Explorer (Browser panel), right-click on **Databases**.
+4. Select **Create > Database...**.
 5. Enter the database name.
-6. Choose file locations and initial sizes.
-7. Click OK.
+6. Choose the owner, encoding, and other settings on the relevant tabs.
+7. Click **Save**.
 
-This creates the database files and the logical structure behind the scenes.
+This creates the database and its logical structure behind the scenes.
 
-### Create a table in SSMS
-1. Expand the database.
-2. Right-click Tables.
-3. Choose New > Table.
-4. Add column names, data types, and nullability.
-5. Set primary key and constraints.
-6. Save the table.
+### Create a table in pgAdmin
+1. Expand the database, then expand **Schemas > public** (or the relevant schema).
+2. Right-click **Tables**.
+3. Choose **Create > Table...**.
+4. On the **Columns** tab, add column names, data types, and nullability.
+5. On the **Constraints** tab, set the primary key and other constraints.
+6. Click **Save**.
 
-This is the GUI equivalent of a CREATE TABLE statement.
+This is the GUI equivalent of a `CREATE TABLE` statement.
 
 ---
 
-## 9. Equivalent T-SQL Examples
+## 9. Equivalent PostgreSQL (psql) Examples
 
 ```sql
--- Create a database
-CREATE DATABASE SchoolDB;
-GO
+-- Create a database (run from psql connected to the 'postgres' database,
+-- or via pgAdmin's Create Database dialog)
+CREATE DATABASE "SchoolDB";
 
-USE SchoolDB;
-GO
+-- Connect to the new database
+-- In psql:
+\c SchoolDB
+-- In pgAdmin, simply click on the database in the Browser panel.
 
 -- Create a table
 CREATE TABLE Students (
-    StudentID INT PRIMARY KEY,
+    StudentID SERIAL PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
     LastName VARCHAR(50) NOT NULL,
     Age INT CHECK (Age >= 0),
     Email VARCHAR(100) UNIQUE
 );
-GO
 
 -- Insert rows
-INSERT INTO Students (StudentID, FirstName, LastName, Age, Email)
+INSERT INTO Students (FirstName, LastName, Age, Email)
 VALUES
-    (1, 'Alice', 'Johnson', 20, 'alice@example.com'),
-    (2, 'Bob', 'Smith', 22, 'bob@example.com');
-GO
+    ('Alice', 'Johnson', 20, 'alice@example.com'),
+    ('Bob', 'Smith', 22, 'bob@example.com');
 
 -- Query rows
 SELECT *
 FROM Students;
-GO
 
--- Basic backup concept in SQL Server
-BACKUP DATABASE SchoolDB
-TO DISK = 'C:\SQLBackups\SchoolDB.bak';
-GO
+-- Basic backup concept in PostgreSQL (run from a terminal, not inside psql)
+-- pg_dump -U postgres -F c -d SchoolDB -f /path/to/SchoolDB.backup
 ```
+
+> Note: `StudentID` uses `SERIAL` (PostgreSQL's auto-incrementing integer) instead of manually assigning IDs, since `INT PRIMARY KEY` alone has no auto-increment behavior in PostgreSQL the way `IDENTITY` does in T-SQL. Backups are typically taken with the `pg_dump` command-line utility (or pgAdmin's **Backup...** option on a database), rather than a `BACKUP DATABASE` SQL statement.
 
 ---
 
@@ -237,11 +238,11 @@ GO
 
 - Database = collection of related data
 - DBMS = software used to manage the database
-- Schema = structure of the database
-- Instance = current database state
+- Schema = structure of the database (and, in PostgreSQL, also a namespace within it)
+- Instance = current database state (and, in PostgreSQL, the running server/cluster)
 - Three levels: external, conceptual, internal
 - DBMS includes query processing, storage management, transactions, recovery, security
-- SQL Server follows a client-server database architecture
+- PostgreSQL follows a client-server database architecture
 
 > 💡 **Core idea**
 > The architecture of a database system separates logical design from physical storage, making the system more powerful, secure, and scalable.
