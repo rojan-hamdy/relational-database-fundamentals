@@ -1,7 +1,5 @@
 # Self-Test — ER to Relational Mapping
 
-> Status: ✅ Ready for practice.
-
 **Q1. What happens to a strong entity during ER-to-relational mapping?**
 
 <details>
