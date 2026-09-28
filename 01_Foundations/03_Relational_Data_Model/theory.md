@@ -53,8 +53,6 @@ Example:
 DepartmentID INT REFERENCES Departments(DepartmentID)
 ```
 
-> Note: unlike T-SQL, PostgreSQL does not use the `FOREIGN KEY` keyword for an inline column-level reference — `REFERENCES` alone is enough. `FOREIGN KEY (...) REFERENCES ...` is only used for the table-level (named or composite) form, as shown in section 2.4 and section 10.
-
 ### 2.4 Composite Key
 A composite key is a key made of multiple columns together.
 
